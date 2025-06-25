@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NGIDOL JKT48</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 30px;
+      color: #ddd;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      color: #a0c4ff;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      background-color: #ffffff;
+      color: #1e3c72;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 20px;
+      margin: 8px 0;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #1e3c72;
+      color: #ffffff;
+      transform: scale(1.03);
+    }
+
+    /* Popup Styles */
+    .popup-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-content {
+      position: relative;
+      background: transparent;
+      padding: 0;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+      width: 320px;
+    }
+
+    .popup-content img {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      background: black;
+      padding: 5px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      .popup-content {
+        width: 400px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 20px 15px;
+      }
+
+      .button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Popup Iklan -->
+  <div class="popup-container" id="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">×</span>
+      <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
+        <img src="iklan.png" alt="Iklan JKT48" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Konten Utama -->
+  <div class="container">
+    <img class="profile-image" src="beritaprofil.jpg" alt="Profile Image" />
+    <h1>NGIDOL JKT48</h1>
+    <h2>Theater | Event | Berita Terbaru | Foto Member | Aktivitas Member</h2>
+
+    <h3>Pembelian Live Streaming</h3>
+    <a href="https://beritajkt48.github.io/info/endorse/a/" target="_blank" class="button">WhatsApp</a>
+    <a href="https://beritajkt48.github.io/info/endorse/a/" target="_blank" class="button">Shopee</a>
+    <a href="https://beritajkt48.github.io/info/endorse/a/" target="_blank" class="button">Website</a>
+
+  </div>
+
+  <!-- Script untuk Popup -->
+  <script>
+    // Tampilkan popup setelah 1 detik
+    setTimeout(() => {
+      document.getElementById("popup").style.display = "flex";
+    }, 1000);
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+  </script>
+</body>
+</html>
