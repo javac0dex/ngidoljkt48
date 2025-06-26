@@ -81,6 +81,7 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
     }
 
     .product-card:hover {
@@ -88,26 +89,59 @@
       box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
     }
 
-    /* Availability Badge */
+    /* Improved Availability Badge */
+    .availability-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 20;
+    }
+
     .availability-badge {
-      margin: 1rem 1rem 0 1rem;
-      display: inline-block;
-      padding: 0.5rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.25rem;
       border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.025em;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .availability-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
     }
 
     .available {
-      background-color: #10b981;
+      background: linear-gradient(135deg, #10b981, #059669);
       color: white;
     }
 
+    .available::before {
+      background-color: #ffffff;
+    }
+
     .not-available {
-      background-color: #ef4444;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
       color: white;
+    }
+
+    .not-available::before {
+      background-color: #ffffff;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     /* Image */
@@ -214,12 +248,13 @@
       color: #dc2626;
     }
 
-    /* Buttons */
+    /* Improved Button Container */
     .button-container {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
       padding-top: 0.5rem;
+      margin-top: 1rem;
     }
 
     .btn {
@@ -227,45 +262,81 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      border-radius: 9999px;
+      padding: 0.875rem 1rem;
+      border-radius: 12px;
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border: none;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      min-height: 48px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
     }
 
     .btn-whatsapp {
-      background-color: #10b981;
+      background: linear-gradient(135deg, #25d366, #128c7e);
       color: white;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
     }
 
     .btn-whatsapp:hover {
-      background-color: #059669;
+      background: linear-gradient(135deg, #128c7e, #075e54);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
     }
 
     .btn-shopee {
-      background-color: white;
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
       color: #ea580c;
       border: 2px solid #ea580c;
+      box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
     }
 
     .btn-shopee:hover {
-      background-color: #ea580c;
+      background: linear-gradient(135deg, #ea580c, #c2410c);
       color: white;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4);
     }
 
-    .btn:disabled {
-      opacity: 0.5;
+    .btn:disabled,
+    .btn.disabled {
+      opacity: 0.4;
       cursor: not-allowed;
       transform: none !important;
-      box-shadow: none !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      pointer-events: none;
+      background: #e5e7eb !important;
+      color: #9ca3af !important;
+      border-color: #d1d5db !important;
+    }
+
+    .btn.disabled::before {
+      display: none;
+    }
+
+    /* Button Icons */
+    .btn-icon {
+      font-size: 1rem;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
     }
 
     /* Footer */
@@ -319,10 +390,6 @@
 
     /* Responsive Design */
     @media (min-width: 640px) {
-      .button-container {
-        flex-direction: row;
-      }
-
       .footer-links {
         flex-direction: row;
         justify-content: center;
@@ -342,6 +409,21 @@
       .card-content {
         padding: 1rem;
       }
+
+      .button-container {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .availability-container {
+        top: 0.75rem;
+        right: 0.75rem;
+      }
+
+      .availability-badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
@@ -359,7 +441,9 @@
     <div class="grid">
       <!-- Show 1 -->
       <div class="product-card">
-        <div class="availability-badge available">Tersedia</div>
+        <div class="availability-container">
+          <div class="availability-badge available">Tersedia</div>
+        </div>
         <div class="image-container">
           <img src="rkj.jpg" alt="ATURAN ANTI CINTA" class="product-image">
           <div class="image-overlay"></div>
@@ -393,11 +477,11 @@
 
           <div class="button-container">
             <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
-              <span>💬</span>
+              <span class="btn-icon">💬</span>
               WhatsApp
             </a>
             <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
-              <span>🛒</span>
+              <span class="btn-icon">🛒</span>
               Shopee
             </a>
           </div>
@@ -406,7 +490,9 @@
 
       <!-- Show 2 -->
       <div class="product-card">
-        <div class="availability-badge not-available">Tidak Tersedia</div>
+        <div class="availability-container">
+          <div class="availability-badge not-available">Tidak Tersedia</div>
+        </div>
         <div class="image-container">
           <img src="pajama.jpg" alt="PAJAMA DRIVE" class="product-image">
           <div class="image-overlay"></div>
@@ -439,12 +525,12 @@
           </div>
 
           <div class="button-container">
-            <a href="#" class="btn btn-whatsapp" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
-              <span>💬</span>
+            <a href="#" class="btn btn-whatsapp disabled">
+              <span class="btn-icon">💬</span>
               WhatsApp
             </a>
-            <a href="#" class="btn btn-shopee" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
-              <span>🛒</span>
+            <a href="#" class="btn btn-shopee disabled">
+              <span class="btn-icon">🛒</span>
               Shopee
             </a>
           </div>
@@ -453,7 +539,9 @@
 
       <!-- Show 3 -->
       <div class="product-card">
-        <div class="availability-badge available">Tersedia</div>
+        <div class="availability-container">
+          <div class="availability-badge available">Tersedia</div>
+        </div>
         <div class="image-container">
           <img src="ramune.jpg" alt="CARA MEMINUM RAMUNE" class="product-image">
           <div class="image-overlay"></div>
@@ -487,11 +575,11 @@
 
           <div class="button-container">
             <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
-              <span>💬</span>
+              <span class="btn-icon">💬</span>
               WhatsApp
             </a>
             <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
-              <span>🛒</span>
+              <span class="btn-icon">🛒</span>
               Shopee
             </a>
           </div>
@@ -500,7 +588,9 @@
 
       <!-- Show 4 -->
       <div class="product-card">
-        <div class="availability-badge available">Tersedia</div>
+        <div class="availability-container">
+          <div class="availability-badge available">Tersedia</div>
+        </div>
         <div class="image-container">
           <img src="pajama.jpg" alt="PAJAMA DRIVE" class="product-image">
           <div class="image-overlay"></div>
@@ -534,11 +624,11 @@
 
           <div class="button-container">
             <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
-              <span>💬</span>
+              <span class="btn-icon">💬</span>
               WhatsApp
             </a>
             <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
-              <span>🛒</span>
+              <span class="btn-icon">🛒</span>
               Shopee
             </a>
           </div>
@@ -547,7 +637,9 @@
 
       <!-- Show 5 -->
       <div class="product-card">
-        <div class="availability-badge not-available">Tidak Tersedia</div>
+        <div class="availability-container">
+          <div class="availability-badge not-available">Tidak Tersedia</div>
+        </div>
         <div class="image-container">
           <img src="ramune.jpg" alt="CARA MEMINUM RAMUNE" class="product-image">
           <div class="image-overlay"></div>
@@ -580,12 +672,12 @@
           </div>
 
           <div class="button-container">
-            <a href="#" class="btn btn-whatsapp" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
-              <span>💬</span>
+            <a href="#" class="btn btn-whatsapp disabled">
+              <span class="btn-icon">💬</span>
               WhatsApp
             </a>
-            <a href="#" class="btn btn-shopee" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
-              <span>🛒</span>
+            <a href="#" class="btn btn-shopee disabled">
+              <span class="btn-icon">🛒</span>
               Shopee
             </a>
           </div>
