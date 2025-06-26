@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jadwal Live Streaming Theater JKT48</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -14,155 +14,280 @@
     }
 
     body {
-      background-color: #f9f9f9;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     header {
-      background-color: #d91a2a;
+      background: linear-gradient(135deg, #d91a2a 0%, #ff6b6b 100%);
       color: #fff;
       text-align: center;
-      padding: 30px 20px;
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 1px;
+      padding: 40px 20px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
     }
 
     .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 40px 20px;
-      gap: 24px;
+      padding: 50px 20px;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .product-card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      width: 320px;
-      transition: transform 0.3s ease;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 350px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #d91a2a, #ff6b6b, #d91a2a);
+      background-size: 200% 100%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 200% 0; }
+      50% { background-position: -200% 0; }
     }
 
     .product-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
     }
 
     .product-card img {
       width: 100%;
-      height: auto;
-      border-radius: 16px 16px 0 0;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .card-content {
+      padding: 25px;
     }
 
     .product-card h2 {
-      font-size: 20px;
+      font-size: 24px;
       color: #d91a2a;
-      margin: 15px 0 5px;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-align: center;
     }
 
     .product-card p {
-      font-size: 14px;
-      color: #555;
-      margin: 5px 15px;
+      font-size: 15px;
+      color: #666;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lineup {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      border-left: 4px solid #d91a2a;
     }
 
     .price {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
       color: #d91a2a;
-      margin: 10px 0;
+      margin: 20px 0;
+      text-align: center;
+      background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px dashed #d91a2a;
     }
 
     .buy-buttons {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      padding: 15px 0 20px;
+      align-items: center;
+      gap: 15px;
+      padding: 20px 0;
+      flex-wrap: wrap;
     }
 
     .buy-buttons a {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background-color: #fff;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #fff, #f8f9fa);
       color: #d91a2a;
       border: 2px solid #d91a2a;
-      padding: 8px 14px;
-      border-radius: 30px;
+      padding: 12px 20px;
+      border-radius: 50px;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      min-width: 130px;
+      box-shadow: 0 4px 15px rgba(217, 26, 42, 0.2);
     }
 
     .buy-buttons a img {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
     }
 
     .buy-buttons a:hover {
-      background-color: #d91a2a;
+      background: linear-gradient(135deg, #d91a2a, #ff6b6b);
       color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(217, 26, 42, 0.4);
     }
 
     .footer-container {
-      background-color: #1a1a1a;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
       color: #fff;
       text-align: center;
-      padding: 40px 20px;
+      padding: 50px 20px;
+      margin-top: 50px;
     }
 
     .footer-container h3 {
-      margin-bottom: 20px;
-      font-size: 20px;
+      margin-bottom: 30px;
+      font-size: 24px;
+      font-weight: 600;
     }
 
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
       flex-wrap: wrap;
     }
 
     .footer-links a {
       color: white;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 16px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: color 0.3s;
+      gap: 10px;
+      transition: all 0.3s ease;
+      padding: 12px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
     }
 
     .footer-links a img {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
     }
 
     .footer-links a:hover {
-      color: #f4a261;
+      color: #ff6b6b;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
     }
 
+    /* Mobile Responsive */
     @media (max-width: 768px) {
+      header {
+        font-size: 24px;
+        padding: 30px 15px;
+      }
+
       .container {
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        padding: 30px 15px;
+        gap: 25px;
       }
 
       .product-card {
-        width: 90%;
+        width: 95%;
+        max-width: 400px;
+      }
+
+      .card-content {
+        padding: 20px;
       }
 
       .buy-buttons {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+        align-items: center;
+        padding: 20px 15px;
       }
 
       .buy-buttons a {
-        width: 80%;
+        width: 200px;
         justify-content: center;
+        padding: 14px 20px;
+        font-size: 16px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .footer-links a {
+        width: 200px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-card {
+        width: 100%;
+      }
+
+      .buy-buttons a {
+        width: 180px;
+        padding: 12px 16px;
+      }
+
+      .product-card h2 {
+        font-size: 20px;
+      }
+
+      .price {
+        font-size: 20px;
       }
     }
   </style>
@@ -174,42 +299,72 @@
     <!-- Produk 1 -->
     <div class="product-card">
       <img src="quitgame.jpg" alt="QUIT GAME">
-      <h2>QUIT GAME</h2>
-      <p>🗓️ Rabu, 26 Mar 2025</p>
-      <p>🕒 19:30 WIB</p>
-      <p><strong>Lineup:</strong> Alya, Cathy, Elin, Daisy, Ella, Gendis, Eli, Marsha, Gracia, Lily, Trisha, Nayla..</p>
-      <p class="price">Rp. 10.000</p>
-      <div class="buy-buttons">
-        <a href="https://wa.me/628973100347" target="_blank"><img src="whatsapp.jpeg" alt="WhatsApp">Whatsapp</a>
-        <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank"><img src="shopee.jpg" alt="Shopee">Shopee</a>
+      <div class="card-content">
+        <h2>QUIT GAME</h2>
+        <p>🗓️ Rabu, 26 Mar 2025</p>
+        <p>🕒 19:30 WIB</p>
+        <div class="lineup">
+          <p><strong>Lineup:</strong> Alya, Cathy, Elin, Daisy, Ella, Gendis, Eli, Marsha, Gracia, Lily, Trisha, Nayla..</p>
+        </div>
+        <p class="price">Rp. 10.000</p>
+        <div class="buy-buttons">
+          <a href="https://wa.me/628973100347" target="_blank">
+            <img src="whatsapp.jpeg" alt="WhatsApp">
+            WhatsApp
+          </a>
+          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
+            <img src="shopee.jpg" alt="Shopee">
+            Shopee
+          </a>
+        </div>
       </div>
     </div>
 
     <!-- Produk 2 -->
     <div class="product-card">
       <img src="jkt48school.jpg" alt="JKT48 SCHOOL">
-      <h2>JKT48 SCHOOL</h2>
-      <p>🗓️ Kamis, 27 Mar 2025</p>
-      <p>🕒 19:30 WIB</p>
-      <p><strong>Lineup:</strong> Christy, Kathrina, Virgi, Auwia, Rilly, Giaa, Maira, Ekin, Jemima, Mikaela, Intan.</p>
-      <p class="price">Rp. 7.000</p>
-      <div class="buy-buttons">
-        <a href="https://wa.me/628973100347" target="_blank"><img src="whatsapp.jpeg" alt="WhatsApp">Whatsapp</a>
-        <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank"><img src="shopee.jpg" alt="Shopee">Shopee</a>
+      <div class="card-content">
+        <h2>JKT48 SCHOOL</h2>
+        <p>🗓️ Kamis, 27 Mar 2025</p>
+        <p>🕒 19:30 WIB</p>
+        <div class="lineup">
+          <p><strong>Lineup:</strong> Christy, Kathrina, Virgi, Auwia, Rilly, Giaa, Maira, Ekin, Jemima, Mikaela, Intan.</p>
+        </div>
+        <p class="price">Rp. 7.000</p>
+        <div class="buy-buttons">
+          <a href="https://wa.me/628973100347" target="_blank">
+            <img src="whatsapp.jpeg" alt="WhatsApp">
+            WhatsApp
+          </a>
+          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
+            <img src="shopee.jpg" alt="Shopee">
+            Shopee
+          </a>
+        </div>
       </div>
     </div>
 
     <!-- Produk 3 -->
     <div class="product-card">
       <img src="caturasta.jpg" alt="CATUR ASTA">
-      <h2>CATUR ASTA</h2>
-      <p>🗓️ Jumat, 28 Mar 2025</p>
-      <p>🕒 19:30 WIB</p>
-      <p><strong>Lineup:</strong> Christy, Lia, Oniel, Olla, Freya, Ella, Gita, Greesel, Eli, Indah, Jessi, Kathrina, Lulu, Marsha, Muthe, Gracia.</p>
-      <p class="price">Rp. 10.000</p>
-      <div class="buy-buttons">
-        <a href="https://wa.me/628973100347" target="_blank"><img src="whatsapp.jpeg" alt="WhatsApp">Whatsapp</a>
-        <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank"><img src="shopee.jpg" alt="Shopee">Shopee</a>
+      <div class="card-content">
+        <h2>CATUR ASTA</h2>
+        <p>🗓️ Jumat, 28 Mar 2025</p>
+        <p>🕒 19:30 WIB</p>
+        <div class="lineup">
+          <p><strong>Lineup:</strong> Christy, Lia, Oniel, Olla, Freya, Ella, Gita, Greesel, Eli, Indah, Jessi, Kathrina, Lulu, Marsha, Muthe, Gracia.</p>
+        </div>
+        <p class="price">Rp. 10.000</p>
+        <div class="buy-buttons">
+          <a href="https://wa.me/628973100347" target="_blank">
+            <img src="whatsapp.jpeg" alt="WhatsApp">
+            WhatsApp
+          </a>
+          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
+            <img src="shopee.jpg" alt="Shopee">
+            Shopee
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -218,9 +373,18 @@
   <div class="footer-container">
     <h3>Info selengkapnya</h3>
     <div class="footer-links">
-      <a href="https://whatsapp.com/channel/0029VakLjElFCCoYNijlNk1l" target="_blank"><img src="whatsapp.jpeg" alt="WhatsApp">Saluran WhatsApp</a>
-      <a href="https://www.ngidoljkt48.com/" target="_blank"><img src="website.jpg" alt="Website">Website</a>
-      <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank"><img src="shopee.jpg" alt="Shopee">Toko Shopee</a>
+      <a href="https://whatsapp.com/channel/0029VakLjElFCCoYNijlNk1l" target="_blank">
+        <img src="whatsapp.jpeg" alt="WhatsApp">
+        Saluran WhatsApp
+      </a>
+      <a href="https://www.ngidoljkt48.com/" target="_blank">
+        <img src="website.jpg" alt="Website">
+        Website
+      </a>
+      <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
+        <img src="shopee.jpg" alt="Shopee">
+        Toko Shopee
+      </a>
     </div>
   </div>
 </body>
