@@ -4,31 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jadwal Live Streaming Theater JKT48</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
     }
 
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed 0%, #2563eb 50%, #7c3aed 100%);
       color: #333;
       line-height: 1.6;
       min-height: 100vh;
     }
 
+    /* Header */
     header {
-      background: linear-gradient(135deg, #d91a2a 0%, #ff6b6b 100%);
-      color: #fff;
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: white;
       text-align: center;
-      padding: 40px 20px;
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      padding: 3rem 1rem;
       position: relative;
       overflow: hidden;
     }
@@ -36,405 +33,586 @@
     header::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      pointer-events: none;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.1);
     }
 
+    header .content {
+      position: relative;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    /* Main Container */
     .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 50px 20px;
-      gap: 30px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 3rem 1rem;
     }
 
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      justify-items: center;
+    }
+
+    /* Product Cards */
     .product-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
-      border-radius: 24px;
+      border-radius: 1.5rem;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      width: 350px;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      width: 100%;
+      max-width: 400px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Availability Badge */
+    .availability-badge {
+      margin: 1rem 1rem 0 1rem;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .available {
+      background-color: #10b981;
+      color: white;
+    }
+
+    .not-available {
+      background-color: #ef4444;
+      color: white;
+    }
+
+    /* Image */
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .image-container {
       overflow: hidden;
       position: relative;
     }
 
-    .product-card::before {
-      content: '';
+    .image-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #d91a2a, #ff6b6b, #d91a2a);
-      background-size: 200% 100%;
-      animation: shimmer 3s ease-in-out infinite;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    @keyframes shimmer {
-      0%, 100% { background-position: 200% 0; }
-      50% { background-position: -200% 0; }
+    .product-card:hover .image-overlay {
+      opacity: 1;
     }
 
-    .product-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-    }
-
-    .product-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 0;
-    }
-
+    /* Card Content */
     .card-content {
-      padding: 25px;
+      padding: 1.5rem;
     }
 
-    .product-card h2 {
-      font-size: 24px;
-      color: #d91a2a;
-      margin-bottom: 15px;
+    .product-title {
+      font-size: 1.25rem;
       font-weight: 700;
+      color: #dc2626;
       text-align: center;
+      margin-bottom: 1rem;
     }
 
-    .product-card p {
-      font-size: 15px;
-      color: #666;
-      margin: 8px 0;
+    /* Info Items */
+    .info-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 500;
     }
 
-    .lineup {
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      padding: 15px;
-      border-radius: 12px;
-      margin: 15px 0;
-      border-left: 4px solid #d91a2a;
+    .info-icon {
+      width: 1rem;
+      height: 1rem;
+      color: #dc2626;
+      flex-shrink: 0;
+    }
+
+    /* Lineup Box */
+    .lineup-box {
+      background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border-left: 4px solid #dc2626;
+      margin: 1rem 0;
+    }
+
+    .lineup-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lineup-title {
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .lineup-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    /* Price */
+    .price-box {
+      background: linear-gradient(135deg, #fef2f2, #fee2e2);
+      border: 2px dashed #dc2626;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      text-align: center;
+      margin: 1rem 0;
     }
 
     .price {
-      font-size: 22px;
+      font-size: 1.5rem;
       font-weight: 700;
-      color: #d91a2a;
-      margin: 20px 0;
-      text-align: center;
-      background: linear-gradient(135deg, #fff5f5, #ffe0e0);
-      padding: 12px;
-      border-radius: 12px;
-      border: 2px dashed #d91a2a;
+      color: #dc2626;
     }
 
-    .buy-buttons {
+    /* Buttons */
+    .button-container {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      padding: 20px 0;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-top: 0.5rem;
     }
 
-    .buy-buttons a {
+    .btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      background: linear-gradient(135deg, #fff, #f8f9fa);
-      color: #d91a2a;
-      border: 2px solid #d91a2a;
-      padding: 12px 20px;
-      border-radius: 50px;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 0.875rem;
       font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      min-width: 130px;
-      box-shadow: 0 4px 15px rgba(217, 26, 42, 0.2);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
     }
 
-    .buy-buttons a img {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
+    .btn-whatsapp {
+      background-color: #10b981;
+      color: white;
     }
 
-    .buy-buttons a:hover {
-      background: linear-gradient(135deg, #d91a2a, #ff6b6b);
+    .btn-whatsapp:hover {
+      background-color: #059669;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-shopee {
+      background-color: white;
+      color: #ea580c;
+      border: 2px solid #ea580c;
+    }
+
+    .btn-shopee:hover {
+      background-color: #ea580c;
       color: white;
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(217, 26, 42, 0.4);
+      box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4);
     }
 
-    .footer-container {
-      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-      color: #fff;
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #111827, #374151);
+      color: white;
+      padding: 3rem 1rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
       text-align: center;
-      padding: 50px 20px;
-      margin-top: 50px;
     }
 
-    .footer-container h3 {
-      margin-bottom: 30px;
-      font-size: 24px;
-      font-weight: 600;
+    .footer-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
     }
 
     .footer-links {
       display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .footer-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
+    .footer-link {
       display: flex;
       align-items: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-      padding: 12px 20px;
-      border-radius: 50px;
+      justify-content: center;
+      gap: 0.75rem;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
 
-    .footer-links a img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-    }
-
-    .footer-links a:hover {
-      color: #ff6b6b;
+    .footer-link:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: translateY(-2px);
     }
 
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      header {
-        font-size: 24px;
-        padding: 30px 15px;
-      }
-
-      .container {
-        flex-direction: column;
-        align-items: center;
-        padding: 30px 15px;
-        gap: 25px;
-      }
-
-      .product-card {
-        width: 95%;
-        max-width: 400px;
-      }
-
-      .card-content {
-        padding: 20px;
-      }
-
-      .buy-buttons {
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-        padding: 20px 15px;
-      }
-
-      .buy-buttons a {
-        width: 200px;
-        justify-content: center;
-        padding: 14px 20px;
-        font-size: 16px;
+    /* Responsive Design */
+    @media (min-width: 640px) {
+      .button-container {
+        flex-direction: row;
       }
 
       .footer-links {
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-      }
-
-      .footer-links a {
-        width: 200px;
+        flex-direction: row;
         justify-content: center;
       }
     }
 
     @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
       .product-card {
-        width: 100%;
+        max-width: none;
       }
 
-      .buy-buttons a {
-        width: 180px;
-        padding: 12px 16px;
-      }
-
-      .product-card h2 {
-        font-size: 20px;
-      }
-
-      .price {
-        font-size: 20px;
+      .card-content {
+        padding: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <header>Jadwal Live Streaming Theater JKT48</header>
+  <!-- Header -->
+  <header>
+    <div class="content">
+      <h1>Jadwal Live Streaming Theater JKT48</h1>
+      <p>Saksikan pertunjukan eksklusif member JKT48</p>
+    </div>
+  </header>
 
-  <div class="container">
-    <!-- Produk 1 -->
-    <div class="product-card">
-      <img src="rkj.jpg" alt="QUIT GAME">
-      <div class="card-content">
-        <h2>ATURAN ANTI CINTA</h2>
-        <p>🗓️ Jumat, 27 Juni 2025</p>
-        <p>🕒 19:00 WIB</p>
-        <div class="lineup">
-          <p><strong>Lineup:</strong> Alya, Amanda, Lana, Cathy, Daisy, Feni, Fritzy, Ella, Gendis, Gracie, Greesel, Eli, Indira, Lyn, Raisha, Gracia..</p>
+  <!-- Main Content -->
+  <main class="container">
+    <div class="grid">
+      <!-- Show 1 -->
+      <div class="product-card">
+        <div class="availability-badge available">Tersedia</div>
+        <div class="image-container">
+          <img src="/placeholder.svg?height=200&width=400" alt="ATURAN ANTI CINTA" class="product-image">
+          <div class="image-overlay"></div>
         </div>
-        <p class="price">Rp. 10.000</p>
-        <div class="buy-buttons">
-          <a href="https://wa.me/628970400899" target="_blank">
-            <img src="whatsapp.jpeg" alt="WhatsApp">
-            WhatsApp
-          </a>
-          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-            <img src="shopee.jpg" alt="Shopee">
-            Shopee
-          </a>
+        <div class="card-content">
+          <h2 class="product-title">ATURAN ANTI CINTA</h2>
+          
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <span>Jumat, 27 Juni 2025</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span>19:00 WIB</span>
+          </div>
+
+          <div class="lineup-box">
+            <div class="lineup-header">
+              <span class="info-icon">👥</span>
+              <div>
+                <div class="lineup-title">Lineup:</div>
+                <div class="lineup-text">Alya, Amanda, Lana, Cathy, Daisy, Feni, Fritzy, Ella, Gendis, Gracie, Greesel, Eli, Indira, Lyn, Raisha, Gracia..</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="price">Rp. 10.000</div>
+          </div>
+
+          <div class="button-container">
+            <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
+              <span>💬</span>
+              WhatsApp
+            </a>
+            <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
+              <span>🛒</span>
+              Shopee
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show 2 -->
+      <div class="product-card">
+        <div class="availability-badge not-available">Tidak Tersedia</div>
+        <div class="image-container">
+          <img src="/placeholder.svg?height=200&width=400" alt="PAJAMA DRIVE" class="product-image">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="card-content">
+          <h2 class="product-title">PAJAMA DRIVE</h2>
+          
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <span>Sabtu, 28 Juni 2025</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span>19:00 WIB</span>
+          </div>
+
+          <div class="lineup-box">
+            <div class="lineup-header">
+              <span class="info-icon">👥</span>
+              <div>
+                <div class="lineup-title">Lineup:</div>
+                <div class="lineup-text">Aralie, Lily, Trisha, Levi, Nayla, Oline, Ribka, Nala, Kimmy, Auwia, Ekin, Intan.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="price">Rp. 7.000</div>
+          </div>
+
+          <div class="button-container">
+            <a href="#" class="btn btn-whatsapp" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+              <span>💬</span>
+              WhatsApp
+            </a>
+            <a href="#" class="btn btn-shopee" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+              <span>🛒</span>
+              Shopee
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show 3 -->
+      <div class="product-card">
+        <div class="availability-badge available">Tersedia</div>
+        <div class="image-container">
+          <img src="/placeholder.svg?height=200&width=400" alt="CARA MEMINUM RAMUNE" class="product-image">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="card-content">
+          <h2 class="product-title">CARA MEMINUM RAMUNE</h2>
+          
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <span>Minggu, 29 Juni 2025</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span>14:00 WIB</span>
+          </div>
+
+          <div class="lineup-box">
+            <div class="lineup-header">
+              <span class="info-icon">👥</span>
+              <div>
+                <div class="lineup-title">Lineup:</div>
+                <div class="lineup-text">Christy, Lia, Cynthia, Danella, Daisy, Olla, Freya, Gita, Greesel, Indah, Indira, Jessi, Kathrina, Lulu, Marsha, Michie.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="price">Rp. 10.000</div>
+          </div>
+
+          <div class="button-container">
+            <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
+              <span>💬</span>
+              WhatsApp
+            </a>
+            <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
+              <span>🛒</span>
+              Shopee
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show 4 -->
+      <div class="product-card">
+        <div class="availability-badge available">Tersedia</div>
+        <div class="image-container">
+          <img src="/placeholder.svg?height=200&width=400" alt="PAJAMA DRIVE" class="product-image">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="card-content">
+          <h2 class="product-title">PAJAMA DRIVE</h2>
+          
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <span>Rabu, 2 Juli 2025</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span>19:00 WIB</span>
+          </div>
+
+          <div class="lineup-box">
+            <div class="lineup-header">
+              <span class="info-icon">👥</span>
+              <div>
+                <div class="lineup-title">Lineup:</div>
+                <div class="lineup-text">Delynn, Erine, Lily, Trisha, Nachia, Oline, Kimmy, Auwia, Giaa, Ekin, Mikaela, Intan.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="price">Rp. 7.000</div>
+          </div>
+
+          <div class="button-container">
+            <a href="https://wa.me/628970400899" target="_blank" class="btn btn-whatsapp">
+              <span>💬</span>
+              WhatsApp
+            </a>
+            <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="btn btn-shopee">
+              <span>🛒</span>
+              Shopee
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show 5 -->
+      <div class="product-card">
+        <div class="availability-badge not-available">Tidak Tersedia</div>
+        <div class="image-container">
+          <img src="/placeholder.svg?height=200&width=400" alt="CARA MEMINUM RAMUNE" class="product-image">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="card-content">
+          <h2 class="product-title">CARA MEMINUM RAMUNE</h2>
+          
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <span>Kamis, 3 Juli 2025</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span>19:00 WIB</span>
+          </div>
+
+          <div class="lineup-box">
+            <div class="lineup-header">
+              <span class="info-icon">👥</span>
+              <div>
+                <div class="lineup-title">Lineup:</div>
+                <div class="lineup-text">Christy, Lia, Lana, Elin, Chelsea, Oniel, Danella, Olla, Gita, Gracie, Greesel, Eli, Indah, Indira, Jessi, Kathrina.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div class="price">Rp. 10.000</div>
+          </div>
+
+          <div class="button-container">
+            <a href="#" class="btn btn-whatsapp" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+              <span>💬</span>
+              WhatsApp
+            </a>
+            <a href="#" class="btn btn-shopee" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+              <span>🛒</span>
+              Shopee
+            </a>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Produk 2 -->
-    <div class="product-card">
-      <img src="pajama.jpg" alt="JKT48 SCHOOL">
-      <div class="card-content">
-        <h2>PAJAMA DRIVE</h2>
-        <p>🗓️ Sabtu, 28 Juni 2025</p>
-        <p>🕒 19:00 WIB</p>
-        <div class="lineup">
-          <p><strong>Lineup:</strong> Aralie, Lily, Trisha, Levi, Nayla, Oline, Ribka, Nala, Kimmy, Auwia, Ekin, Intan.</p>
-        </div>
-        <p class="price">Rp. 7.000</p>
-        <div class="buy-buttons">
-          <a href="https://wa.me/628970400899" target="_blank">
-            <img src="whatsapp.jpeg" alt="WhatsApp">
-            WhatsApp
-          </a>
-          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-            <img src="shopee.jpg" alt="Shopee">
-            Shopee
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Produk 3 -->
-    <div class="product-card">
-      <img src="ramune.jpg" alt="CATUR ASTA">
-      <div class="card-content">
-        <h2>CARA MEMINUM RAMUNE</h2>
-        <p>🗓️ Minggu, 29 Juni 2025</p>
-        <p>🕒 14:00 WIB</p>
-        <div class="lineup">
-          <p><strong>Lineup:</strong> Christy, Lia, Cynthia, Danella, Daisy, Olla, Freya, Gita, Greesel, Indah, Indira, Jessi, Kathrina, Lulu, Marsha, Michie.</p>
-        </div>
-        <p class="price">Rp. 10.000</p>
-        <div class="buy-buttons">
-          <a href="https://wa.me/628970400899" target="_blank">
-            <img src="whatsapp.jpeg" alt="WhatsApp">
-            WhatsApp
-          </a>
-          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-            <img src="shopee.jpg" alt="Shopee">
-            Shopee
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Produk 4 -->
-    <div class="product-card">
-      <img src="pajama.jpg" alt="JKT48 SCHOOL">
-      <div class="card-content">
-        <h2>PAJAMA DRIVE</h2>
-        <p>🗓️ Rabu, 2 Juli 2025</p>
-        <p>🕒 19:00 WIB</p>
-        <div class="lineup">
-          <p><strong>Lineup:</strong> Delynn, Erine, Lily, Trisha, Nachia, Oline, Kimmy, Auwia, Giaa, Ekin, Mikaela, Intan.</p>
-        </div>
-        <p class="price">Rp. 7.000</p>
-        <div class="buy-buttons">
-          <a href="https://wa.me/628970400899" target="_blank">
-            <img src="whatsapp.jpeg" alt="WhatsApp">
-            WhatsApp
-          </a>
-          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-            <img src="shopee.jpg" alt="Shopee">
-            Shopee
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Produk 5 -->
-    <div class="product-card">
-      <img src="ramune.jpg" alt="JKT48 SCHOOL">
-      <div class="card-content">
-        <h2>CARA MEMINUM RAMUNE</h2>
-        <p>🗓️ Kamis, 3 Juli 2025</p>
-        <p>🕒 19:00 WIB</p>
-        <div class="lineup">
-          <p><strong>Lineup:</strong> Christy, Lia, Lana, Elin, Chelsea, Oniel, Danella, Olla, Gita, Gracie, Greesel, Eli, Indah, Indira, Jessi, Kathrina.</p>
-        </div>
-        <p class="price">Rp. 10.000</p>
-        <div class="buy-buttons">
-          <a href="https://wa.me/628970400899" target="_blank">
-            <img src="whatsapp.jpeg" alt="WhatsApp">
-            WhatsApp
-          </a>
-          <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-            <img src="shopee.jpg" alt="Shopee">
-            Shopee
-          </a>
-        </div>
-      </div>
-    </div>
-    
-  </div>
+  </main>
 
   <!-- Footer -->
-  <div class="footer-container">
-    <h3>Info selengkapnya</h3>
-    <div class="footer-links">
-      <a href="https://whatsapp.com/channel/0029VakLjElFCCoYNijlNk1l" target="_blank">
-        <img src="whatsapp.jpeg" alt="WhatsApp">
-        Saluran WhatsApp
-      </a>
-      <a href="https://www.ngidoljkt48.com/" target="_blank">
-        <img src="website.jpg" alt="Website">
-        Website
-      </a>
-      <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank">
-        <img src="shopee.jpg" alt="Shopee">
-        Toko Shopee
-      </a>
+  <footer>
+    <div class="footer-content">
+      <h3 class="footer-title">Info Selengkapnya</h3>
+      <div class="footer-links">
+        <a href="https://whatsapp.com/channel/0029VakLjElFCCoYNijlNk1l" target="_blank" class="footer-link">
+          <span>💬</span>
+          Saluran WhatsApp
+        </a>
+        <a href="https://www.ngidoljkt48.com/" target="_blank" class="footer-link">
+          <span>🌐</span>
+          Website
+        </a>
+        <a href="https://s.shopee.co.id/AUg4dsQtYw" target="_blank" class="footer-link">
+          <span>🛒</span>
+          Toko Shopee
+        </a>
+      </div>
     </div>
-  </div>
+  </footer>
 </body>
 </html>
