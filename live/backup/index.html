@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JKT48 Live Streaming</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+    
+    <style type="text/css">
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .stream-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(255, 71, 87, 0.7); }
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: #FFD700;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== CONTROLS SECTION ===== */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            color: #cccccc;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: linear-gradient(45deg, #128C7E, #075E54);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* ===== CUSTOM VIDEO.JS STYLING ===== */
+        .video-js .vjs-big-play-button {
+            background: rgba(255, 215, 0, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .video-js .vjs-big-play-button:hover {
+            background: rgba(255, 215, 0, 1);
+            transform: scale(1.1);
+        }
+
+        .video-js .vjs-control-bar {
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8));
+        }
+
+        .video-js .vjs-progress-control .vjs-play-progress {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .stream-container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .controls {
+                gap: 10px;
+            }
+
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stream-container {
+                padding: 10px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .live-badge {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== UTILITY ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid #ff4757;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stream-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">JKT48 LIVE STREAMING</h1>
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                <span>LIVE</span>
+            </div>
+        </header>
+      
+      
+
+        <!-- Video Player -->
+        <div class="video-wrapper">
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+                <div class="loading-text">Memuat streaming...</div>
+            </div>
+            
+            <video 
+                id="jkt48-stream"
+                class="video-js vjs-default-skin"
+                controls
+                preload="auto"
+                data-setup='{}'>
+                <source 
+                    src="https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8" 
+                    type="application/x-mpegURL">
+                <p class="vjs-no-js">
+                    Untuk menonton streaming, silakan aktifkan JavaScript dan gunakan browser yang mendukung HTML5 video.
+                </p>
+            </video>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button class="control-btn" onclick="refreshStream()">🔄 Refresh</button>
+            <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+            <button class="control-btn" onclick="toggleMute()">🔊 Mute/Unmute</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                Theater Show JKT48 - Streaming Backup<br>
+                Jika mengalami masalah, silakan hubungi support kami.
+            </p>
+            <a href="https://wa.me/628970400899" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="whatsapp-btn">
+                <svg class="whatsapp-icon" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                </svg>
+                WhatsApp Support
+            </a>
+        </footer>
+    </div>
+
+    <!-- Video.js & HLS.js -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>
+
+    <script>
+        // Global variables
+        let player = null;
+        let hls = null;
+        const streamUrl = 'https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8';
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePlayer();
+            setupKeyboardShortcuts();
+        });
+
+        // Initialize Video Player with HLS
+        function initializePlayer() {
+            try {
+                // Initialize Video.js player
+                player = videojs('jkt48-stream', {
+                    fluid: true,
+                    responsive: true,
+                    controls: true,
+                    preload: 'auto',
+                    liveui: true,
+                    playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                    html5: {
+                        vhs: {
+                            overrideNative: !videojs.browser.IS_SAFARI
+                        }
+                    }
+                });
+
+                // Setup HLS.js for better m3u8 support
+                if (Hls.isSupported()) {
+                    console.log('HLS.js is supported, initializing...');
+                    
+                    hls = new Hls({
+                        // HLS.js configuration for optimal m3u8 playback
+                        enableWorker: true,
+                        lowLatencyMode: true,
+                        backBufferLength: 90,
+                        maxBufferLength: 30,
+                        maxMaxBufferLength: 600,
+                        liveSyncDurationCount: 3,
+                        liveMaxLatencyDurationCount: 10,
+                        manifestLoadingTimeOut: 10000,
+                        manifestLoadingMaxRetry: 4,
+                        levelLoadingTimeOut: 10000,
+                        levelLoadingMaxRetry: 4,
+                        fragLoadingTimeOut: 20000,
+                        fragLoadingMaxRetry: 6,
+                        startLevel: -1, // Auto quality selection
+                        debug: false
+                    });
+
+                    // Load m3u8 source
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(player.tech().el());
+
+                    // HLS Events
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log('M3U8 manifest loaded successfully');
+                        hideLoading();
+                    });
+
+                    hls.on(Hls.Events.LEVEL_LOADED, function(event, data) {
+                        console.log('Level loaded:', data.level);
+                    });
+
+                    hls.on(Hls.Events.FRAG_LOADED, function() {
+                        hideLoading();
+                    });
+
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        console.error('HLS Error:', data);
+                        handleHLSError(data);
+                    });
+
+                } else if (player.tech().el().canPlayType('application/vnd.apple.mpegurl')) {
+                    // Native HLS support (Safari)
+                    console.log('Using native HLS support');
+                    player.src({
+                        src: streamUrl,
+                        type: 'application/x-mpegURL'
+                    });
+                } else {
+                    showError('Browser Anda tidak mendukung streaming HLS/M3U8');
+                    return;
+                }
+
+                // Player Events
+                player.ready(function() {
+                    console.log('Player ready');
+                    hideLoading();
+                });
+
+                player.on('loadstart', function() {
+                    console.log('Loading stream...');
+                    showLoading();
+                });
+
+                player.on('canplay', function() {
+                    console.log('Stream ready to play');
+                    hideLoading();
+                });
+
+                player.on('waiting', function() {
+                    showLoading();
+                });
+
+                player.on('playing', function() {
+                    hideLoading();
+                });
+
+                player.on('error', function() {
+                    console.error('Player error');
+                    handlePlayerError();
+                });
+
+            } catch (error) {
+                console.error('Error initializing player:', error);
+                showError('Gagal menginisialisasi player');
+            }
+        }
+
+        // Handle HLS Errors
+        function handleHLSError(data) {
+            if (data.fatal) {
+                switch(data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.log('Network error, trying to recover...');
+                        hls.startLoad();
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        console.log('Media error, trying to recover...');
+                        hls.recoverMediaError();
+                        break;
+                    default:
+                        console.log('Fatal error, destroying HLS');
+                        hls.destroy();
+                        showError('Terjadi kesalahan fatal. Silakan refresh halaman.');
+                        break;
+                }
+            }
+        }
+
+        // Handle Player Errors
+        function handlePlayerError() {
+            setTimeout(() => {
+                player.error(null);
+                player.load();
+            }, 3000);
+        }
+
+        // Show/Hide Loading
+        function showLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+            }
+        }
+
+        // Show Error
+        function showError(message) {
+            hideLoading();
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.innerHTML = `
+                    <div style="text-align: center; color: #ff4757;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 20px;">${message}</div>
+                        <button onclick="location.reload()" style="
+                            background: linear-gradient(45deg, #FFD700, #FFA500);
+                            color: #000;
+                            border: none;
+                            padding: 12px 25px;
+                            border-radius: 25px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            font-size: 1rem;
+                        ">Refresh Halaman</button>
+                    </div>
+                `;
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Control Functions
+        function refreshStream() {
+            if (player) {
+                showLoading();
+                player.load();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (player) {
+                if (player.isFullscreen()) {
+                    player.exitFullscreen();
+                } else {
+                    player.requestFullscreen();
+                }
+            }
+        }
+
+        function toggleMute() {
+            if (player) {
+                player.muted(!player.muted());
+            }
+        }
+
+        // Keyboard Shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                if (!player) return;
+
+                switch(e.key.toLowerCase()) {
+                    case ' ':
+                        e.preventDefault();
+                        if (player.paused()) {
+                            player.play();
+                        } else {
+                            player.pause();
+                        }
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                    case 'm':
+                        e.preventDefault();
+                        toggleMute();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        refreshStream();
+                        break;
+                }
+            });
+        }
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (hls) {
+                hls.destroy();
+            }
+            if (player) {
+                player.dispose();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JKT48 Live Streaming</title>
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet">
+    
+    <style type="text/css">
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .stream-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
+            to { box-shadow: 0 4px 25px rgba(255, 71, 87, 0.7); }
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: #FFD700;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== CONTROLS SECTION ===== */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            color: #cccccc;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: linear-gradient(45deg, #128C7E, #075E54);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* ===== CUSTOM VIDEO.JS STYLING ===== */
+        .video-js .vjs-big-play-button {
+            background: rgba(255, 215, 0, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .video-js .vjs-big-play-button:hover {
+            background: rgba(255, 215, 0, 1);
+            transform: scale(1.1);
+        }
+
+        .video-js .vjs-control-bar {
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8));
+        }
+
+        .video-js .vjs-progress-control .vjs-play-progress {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .stream-container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .controls {
+                gap: 10px;
+            }
+
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stream-container {
+                padding: 10px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .live-badge {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== UTILITY ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid #ff4757;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stream-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">JKT48 LIVE STREAMING</h1>
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                <span>LIVE</span>
+            </div>
+        </header>
+      
+      
+
+        <!-- Video Player -->
+        <div class="video-wrapper">
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+                <div class="loading-text">Memuat streaming...</div>
+            </div>
+            
+            <video 
+                id="jkt48-stream"
+                class="video-js vjs-default-skin"
+                controls
+                preload="auto"
+                data-setup='{}'>
+                <source 
+                    src="https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8" 
+                    type="application/x-mpegURL">
+                <p class="vjs-no-js">
+                    Untuk menonton streaming, silakan aktifkan JavaScript dan gunakan browser yang mendukung HTML5 video.
+                </p>
+            </video>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button class="control-btn" onclick="refreshStream()">🔄 Refresh</button>
+            <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+            <button class="control-btn" onclick="toggleMute()">🔊 Mute/Unmute</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                Theater Show JKT48 - Streaming Backup<br>
+                Jika mengalami masalah, silakan hubungi support kami.
+            </p>
+            <a href="https://wa.me/628970400899" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="whatsapp-btn">
+                <svg class="whatsapp-icon" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                </svg>
+                WhatsApp Support
+            </a>
+        </footer>
+    </div>
+
+    <!-- Video.js & HLS.js -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>
+
+    <script>
+        // Global variables
+        let player = null;
+        let hls = null;
+        const streamUrl = 'https://aps13.playlist.live-video.net/v1/playlist/CsoF-Tm7yfAvMunu2ZfTWCLPvttYd_BtBVPqfbQSzHvT7lFvXTUvq8ESVUYJj5CYm0DT_u2BVEeB23--O9KJ3bMTRNLYdhMDqbGe04r6l-zP8UW53WTMJSHQqwbqIaRAlhvg1aPiPurbGz9UBQPteI8yM299TbBbNqf7Yh60Rf4MYGqw1nLP7f8Vr9JNMkHn_RsxOFQMRTPjHXlrgaNYFPq6_EsZ1vwUzxjPVv8YKBS6lly5G3l_aQ5EXYXcR_dS0TgLJmZEOTu3H5k2Sr1gVBQ8DOeS3XcY3y8k3b3EdryuXYJjrZVi2jva9RE1M3eK0z_E-BEDl0oIM6s6OkibTbrKCDZDVa60RLq1qoxFT2utbYZGkmSqj40CfxKjQpAbUoANSlLThx6d3QcSpOtALJSVWH8IOv_HegD1OpvPumdUiVXsVqtdgsNrbHz62Gl3Gt66-X0SGVNqggD6n17I-Z_KlEgxfViEodKD1lHz9rjfuEAJMefLz9IGUM5a9c-mZiFPEWLrsBt_5dokTWlyMvSGj0IMpGbDhytWBFtZYj-GSu-ghjnVgvxLr7lnmpbZq4BvRj8Atq1QaVSAD60dJkcTQXk6VmZ7DJkbAopRcr9Io3BSj57rzF5joRQEkwkwMranTxC2IqAwxLfq7uFG4zZy26ktFbCkxjBCplke6Qf7ExgzqPGKeR6V1rZJGb-NTzADRWaBXZmW0D_VEtzxylQDf6b4LydCge4uwaC9jaRYhkjsm4i9_ZAZMcdn0PKlXlDa2CJTiQ_Yb3_x1HBJeMXJrGtc07Rn_aYmnBRz9p7hC2rFhtQM36aQn4DvuqqCtJldgp5Moo3gRdvDl20TdyST4RWiweE_en9Nro7ogf8ZvERX8-vD4d4Yt_TtGR6wtPx7Bxvd4azof4cSLf2W3ZM71zViwoNn2xXxlBbWADYChAFYpd7t8YLU23TGGgxJAJi7_RjoVgYYjP8gASoJdXMtd2VzdC0yMOEM.m3u8';
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePlayer();
+            setupKeyboardShortcuts();
+        });
+
+        // Initialize Video Player with HLS
+        function initializePlayer() {
+            try {
+                // Initialize Video.js player
+                player = videojs('jkt48-stream', {
+                    fluid: true,
+                    responsive: true,
+                    controls: true,
+                    preload: 'auto',
+                    liveui: true,
+                    playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                    html5: {
+                        vhs: {
+                            overrideNative: !videojs.browser.IS_SAFARI
+                        }
+                    }
+                });
+
+                // Setup HLS.js for better m3u8 support
+                if (Hls.isSupported()) {
+                    console.log('HLS.js is supported, initializing...');
+                    
+                    hls = new Hls({
+                        // HLS.js configuration for optimal m3u8 playback
+                        enableWorker: true,
+                        lowLatencyMode: true,
+                        backBufferLength: 90,
+                        maxBufferLength: 30,
+                        maxMaxBufferLength: 600,
+                        liveSyncDurationCount: 3,
+                        liveMaxLatencyDurationCount: 10,
+                        manifestLoadingTimeOut: 10000,
+                        manifestLoadingMaxRetry: 4,
+                        levelLoadingTimeOut: 10000,
+                        levelLoadingMaxRetry: 4,
+                        fragLoadingTimeOut: 20000,
+                        fragLoadingMaxRetry: 6,
+                        startLevel: -1, // Auto quality selection
+                        debug: false
+                    });
+
+                    // Load m3u8 source
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(player.tech().el());
+
+                    // HLS Events
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log('M3U8 manifest loaded successfully');
+                        hideLoading();
+                    });
+
+                    hls.on(Hls.Events.LEVEL_LOADED, function(event, data) {
+                        console.log('Level loaded:', data.level);
+                    });
+
+                    hls.on(Hls.Events.FRAG_LOADED, function() {
+                        hideLoading();
+                    });
+
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        console.error('HLS Error:', data);
+                        handleHLSError(data);
+                    });
+
+                } else if (player.tech().el().canPlayType('application/vnd.apple.mpegurl')) {
+                    // Native HLS support (Safari)
+                    console.log('Using native HLS support');
+                    player.src({
+                        src: streamUrl,
+                        type: 'application/x-mpegURL'
+                    });
+                } else {
+                    showError('Browser Anda tidak mendukung streaming HLS/M3U8');
+                    return;
+                }
+
+                // Player Events
+                player.ready(function() {
+                    console.log('Player ready');
+                    hideLoading();
+                });
+
+                player.on('loadstart', function() {
+                    console.log('Loading stream...');
+                    showLoading();
+                });
+
+                player.on('canplay', function() {
+                    console.log('Stream ready to play');
+                    hideLoading();
+                });
+
+                player.on('waiting', function() {
+                    showLoading();
+                });
+
+                player.on('playing', function() {
+                    hideLoading();
+                });
+
+                player.on('error', function() {
+                    console.error('Player error');
+                    handlePlayerError();
+                });
+
+            } catch (error) {
+                console.error('Error initializing player:', error);
+                showError('Gagal menginisialisasi player');
+            }
+        }
+
+        // Handle HLS Errors
+        function handleHLSError(data) {
+            if (data.fatal) {
+                switch(data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.log('Network error, trying to recover...');
+                        hls.startLoad();
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        console.log('Media error, trying to recover...');
+                        hls.recoverMediaError();
+                        break;
+                    default:
+                        console.log('Fatal error, destroying HLS');
+                        hls.destroy();
+                        showError('Terjadi kesalahan fatal. Silakan refresh halaman.');
+                        break;
+                }
+            }
+        }
+
+        // Handle Player Errors
+        function handlePlayerError() {
+            setTimeout(() => {
+                player.error(null);
+                player.load();
+            }, 3000);
+        }
+
+        // Show/Hide Loading
+        function showLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+            }
+        }
+
+        // Show Error
+        function showError(message) {
+            hideLoading();
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.innerHTML = `
+                    <div style="text-align: center; color: #ff4757;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+                        <div style="font-size: 1.2rem; margin-bottom: 20px;">${message}</div>
+                        <button onclick="location.reload()" style="
+                            background: linear-gradient(45deg, #FFD700, #FFA500);
+                            color: #000;
+                            border: none;
+                            padding: 12px 25px;
+                            border-radius: 25px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            font-size: 1rem;
+                        ">Refresh Halaman</button>
+                    </div>
+                `;
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Control Functions
+        function refreshStream() {
+            if (player) {
+                showLoading();
+                player.load();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (player) {
+                if (player.isFullscreen()) {
+                    player.exitFullscreen();
+                } else {
+                    player.requestFullscreen();
+                }
+            }
+        }
+
+        function toggleMute() {
+            if (player) {
+                player.muted(!player.muted());
+            }
+        }
+
+        // Keyboard Shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                if (!player) return;
+
+                switch(e.key.toLowerCase()) {
+                    case ' ':
+                        e.preventDefault();
+                        if (player.paused()) {
+                            player.play();
+                        } else {
+                            player.pause();
+                        }
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                    case 'm':
+                        e.preventDefault();
+                        toggleMute();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        refreshStream();
+                        break;
+                }
+            });
+        }
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (hls) {
+                hls.destroy();
+            }
+            if (player) {
+                player.dispose();
+            }
+        });
+    </script>
+</body>
+</html>
