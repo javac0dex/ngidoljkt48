@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV TBS</title>
+  <style>
+      body {
+          margin: 0;
+          font-family: sans-serif;
+          background-image: url('/placeholder.svg?height=1080&width=1920');
+          background-size: cover;
+          background-position: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-height: 100vh;
+          color: #333;
+      }
+      .header {
+          width: 100%;
+          padding: 15px 0;
+          text-align: center;
+          background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background for header */
+          color: white;
+          font-size: 1.2em;
+          position: fixed; /* Keep header at the top */
+          top: 0;
+          left: 0;
+          z-index: 10;
+      }
+      .main-container {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          width: 90%;
+          max-width: 800px;
+          margin-top: 80px; /* Space for fixed header */
+          margin-bottom: 20px;
+          padding: 20px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+      }
+      .tbs-title {
+          font-size: 2.5em;
+          font-weight: bold;
+          margin-bottom: 20px;
+          text-align: center;
+          color: #333;
+      }
+      .video-chat-section {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          gap: 20px;
+          align-items: center;
+      }
+      .video-wrapper {
+          position: relative;
+          width: 100%;
+          padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+          background-color: #f0f0f0; /* Placeholder for loading */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 200px; /* Minimum height for the video area */
+      }
+      .video-wrapper iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border: none;
+      }
+      .chat-section {
+          text-align: center;
+          margin-top: 20px;
+      }
+      .chat-section p {
+          font-size: 1.1em;
+          margin-bottom: 10px;
+      }
+      .chat-section .join-button {
+          background-color: #007bff;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 1em;
+          text-decoration: none;
+          display: inline-block;
+      }
+      .chat-section .join-button:hover {
+          background-color: #0056b3;
+      }
+      .pop-out-link {
+          margin-top: 30px;
+          font-size: 1em;
+          text-decoration: underline;
+          color: #333;
+      }
+      .pop-out-link:hover {
+          color: #007bff;
+      }
+
+      /* Responsive adjustments */
+      @media (min-width: 768px) {
+          .video-chat-section {
+              flex-direction: row;
+              align-items: flex-start;
+          }
+          .video-wrapper {
+              flex: 2; /* Video takes more space */
+              margin-right: 20px;
+          }
+          .chat-section {
+              flex: 1; /* Chat takes less space */
+              margin-top: 0;
+          }
+      }
+  </style>
+</head>
+<body>
+  <div class="header">
+      日本電視台
+  </div>
+
+  <div class="main-container">
+      <h1 class="tbs-title">TBS</h1>
+
+      <div class="video-chat-section">
+          <div class="video-wrapper">
+              <iframe
+                  src="https://mov3.co/en/tbs/"
+                  title="TBS Live Stream"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+              ></iframe>
+          </div>
+          <div class="chat-section">
+              <p>Tap or click to enter the chatroom</p>
+              <a href="#" class="join-button">Join</a>
+          </div>
+      </div>
+
+      <a href="https://mov3.co/en/tbs/" target="_blank" class="pop-out-link">POP OUT</a>
+  </div>
+</body>
+</html>
