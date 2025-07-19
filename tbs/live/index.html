@@ -1,155 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TV TBS</title>
-  <style>
-      body {
-          margin: 0;
-          font-family: sans-serif;
-          background-image: url('/placeholder.svg?height=1080&width=1920');
-          background-size: cover;
-          background-position: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          min-height: 100vh;
-          color: #333;
-      }
-      .header {
-          width: 100%;
-          padding: 15px 0;
-          text-align: center;
-          background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background for header */
-          color: white;
-          font-size: 1.2em;
-          position: fixed; /* Keep header at the top */
-          top: 0;
-          left: 0;
-          z-index: 10;
-      }
-      .main-container {
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-          width: 90%;
-          max-width: 800px;
-          margin-top: 80px; /* Space for fixed header */
-          margin-bottom: 20px;
-          padding: 20px;
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          z-index: 1;
-      }
-      .tbs-title {
-          font-size: 2.5em;
-          font-weight: bold;
-          margin-bottom: 20px;
-          text-align: center;
-          color: #333;
-      }
-      .video-chat-section {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          gap: 20px;
-          align-items: center;
-      }
-      .video-wrapper {
-          position: relative;
-          width: 100%;
-          padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-          background-color: #f0f0f0; /* Placeholder for loading */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 200px; /* Minimum height for the video area */
-      }
-      .video-wrapper iframe {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          border: none;
-      }
-      .chat-section {
-          text-align: center;
-          margin-top: 20px;
-      }
-      .chat-section p {
-          font-size: 1.1em;
-          margin-bottom: 10px;
-      }
-      .chat-section .join-button {
-          background-color: #007bff;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 1em;
-          text-decoration: none;
-          display: inline-block;
-      }
-      .chat-section .join-button:hover {
-          background-color: #0056b3;
-      }
-      .pop-out-link {
-          margin-top: 30px;
-          font-size: 1em;
-          text-decoration: underline;
-          color: #333;
-      }
-      .pop-out-link:hover {
-          color: #007bff;
-      }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV TBS by BERITA JKT48</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      /* Responsive adjustments */
-      @media (min-width: 768px) {
-          .video-chat-section {
-              flex-direction: row;
-              align-items: flex-start;
-          }
-          .video-wrapper {
-              flex: 2; /* Video takes more space */
-              margin-right: 20px;
-          }
-          .chat-section {
-              flex: 1; /* Chat takes less space */
-              margin-top: 0;
-          }
-      }
-  </style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        #video {
+            width: 100%;
+            height: auto;
+            min-height: 400px;
+            background: #000;
+            display: block;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status.playing {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            #video {
+                min-height: 250px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="header">
-      日本電視台
-  </div>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📺 TV TBS</h1>
+            <p class="subtitle">by BERITA JKT48</p>
+        </div>
 
-  <div class="main-container">
-      <h1 class="tbs-title">TBS</h1>
+        <div class="video-container">
+            <video 
+                id="video" 
+                controls 
+                autoplay 
+                muted
+                poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23000'/%3E%3Ctext x='400' y='200' font-family='Arial' font-size='24' fill='%23fff' text-anchor='middle' dy='0.3em'%3ETV TBS - Loading...%3C/text%3E%3C/svg%3E"
+            >
+                <p>Browser Anda tidak mendukung video HTML5.</p>
+            </video>
+        </div>
 
-      <div class="video-chat-section">
-          <div class="video-wrapper">
-              <iframe
-                  src="https://mov3.co/en/tbs/"
-                  title="TBS Live Stream"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-              ></iframe>
-          </div>
-          <div class="chat-section">
-              <p>Tap or click to enter the chatroom</p>
-              <a href="#" class="join-button">Join</a>
-          </div>
-      </div>
+        <div class="controls">
+            <button class="btn btn-primary" onclick="playStream()">
+                ▶️ Mulai Streaming
+            </button>
+            <button class="btn btn-secondary" onclick="pauseStream()">
+                ⏸️ Pause
+            </button>
+            <button class="btn btn-secondary" onclick="reloadStream()">
+                🔄 Reload
+            </button>
+            <button class="btn btn-secondary" onclick="toggleFullscreen()">
+                🔳 Fullscreen
+            </button>
+        </div>
 
-      <a href="https://mov3.co/en/tbs/" target="_blank" class="pop-out-link">POP OUT</a>
-  </div>
+        <div id="status" class="status loading">
+            🔄 Memuat streaming...
+        </div>
+
+        <div class="footer">
+            <p>🎬 Live Streaming TV TBS | Powered by HLS Technology</p>
+            <p>📡 Stream URL: tbs5.mov3.co/hls/tbs.m3u8</p>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const statusDiv = document.getElementById('status');
+        const streamUrl = 'https://tbs5.mov3.co/hls/tbs.m3u8';
+
+        let hls;
+
+        function updateStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        function initializePlayer() {
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 90
+                });
+
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    updateStatus('✅ Stream siap diputar!', 'playing');
+                    video.play().catch(e => {
+                        console.log('Autoplay prevented:', e);
+                        updateStatus('🎵 Klik tombol play untuk memulai', 'loading');
+                    });
+                });
+
+                hls.on(Hls.Events.ERROR, function(event, data) {
+                    console.error('HLS Error:', data);
+                    if (data.fatal) {
+                        switch(data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                updateStatus('❌ Error jaringan - Mencoba reconnect...', 'error');
+                                hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                updateStatus('❌ Error media - Mencoba recovery...', 'error');
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                updateStatus('❌ Error fatal - Reload halaman', 'error');
+                                hls.destroy();
+                                break;
+                        }
+                    }
+                });
+
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Safari native HLS support
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    updateStatus('✅ Stream siap diputar!', 'playing');
+                });
+                video.addEventListener('error', function() {
+                    updateStatus('❌ Error loading stream', 'error');
+                });
+            } else {
+                updateStatus('❌ Browser tidak mendukung HLS streaming', 'error');
+            }
+        }
+
+        function playStream() {
+            if (video.paused) {
+                video.play().then(() => {
+                    updateStatus('▶️ Sedang streaming...', 'playing');
+                }).catch(e => {
+                    console.error('Play error:', e);
+                    updateStatus('❌ Error saat play', 'error');
+                });
+            }
+        }
+
+        function pauseStream() {
+            if (!video.paused) {
+                video.pause();
+                updateStatus('⏸️ Stream di-pause', 'loading');
+            }
+        }
+
+        function reloadStream() {
+            updateStatus('🔄 Memuat ulang stream...', 'loading');
+            if (hls) {
+                hls.destroy();
+            }
+            setTimeout(initializePlayer, 1000);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                video.requestFullscreen().catch(err => {
+                    console.error('Fullscreen error:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Event listeners
+        video.addEventListener('play', () => {
+            updateStatus('▶️ Sedang streaming...', 'playing');
+        });
+
+        video.addEventListener('pause', () => {
+            updateStatus('⏸️ Stream di-pause', 'loading');
+        });
+
+        video.addEventListener('waiting', () => {
+            updateStatus('⏳ Buffering...', 'loading');
+        });
+
+        video.addEventListener('playing', () => {
+            updateStatus('▶️ Sedang streaming...', 'playing');
+        });
+
+        // Initialize player when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('🔄 Menginisialisasi player...', 'loading');
+            setTimeout(initializePlayer, 1000);
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Page is hidden, pause video to save bandwidth
+                if (!video.paused) {
+                    video.pause();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
