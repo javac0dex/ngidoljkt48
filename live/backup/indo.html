@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
       body {
           display: flex;
           flex-direction: column;
-          justify-content: flex-start; /* Align items to the start of the flex container */
+          justify-content: flex-start;
           align-items: center;
           min-height: 100vh;
           background-color: #f0f2f5;
@@ -24,8 +24,8 @@
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           text-align: center;
           width: 100%;
-          max-width: 900px; /* Max width for the container */
-          margin-bottom: 20px; /* Space between containers if multiple */
+          max-width: 900px;
+          margin-bottom: 20px;
       }
       h1 {
           color: #333;
@@ -38,7 +38,7 @@
       }
       iframe {
           width: 100%;
-          height: 500px; /* Adjust height as needed */
+          height: 500px;
           border: 1px solid #ddd;
           border-radius: 4px;
       }
@@ -53,12 +53,26 @@
   <div class="container">
       <h1>Web Streaming</h1>
       <h2>Server 1</h2>
-      <iframe src="https://monmonsport.blogspot.com/p/aff.html" allowfullscreen title="Streaming Server 1"></iframe>
+      <iframe 
+          src="https://monmonsport.blogspot.com/p/aff.html"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowfullscreen
+          scrolling="no"
+          frameborder="0"
+          title="Streaming Server 1">
+      </iframe>
   </div>
 
   <div class="container">
       <h2>Server 2</h2>
-      <iframe src="https://monmonsport.blogspot.com/p/aff2.html" allowfullscreen title="Streaming Server 2"></iframe>
+      <iframe 
+          src="https://monmonsport.blogspot.com/p/aff2.html"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowfullscreen
+          scrolling="no"
+          frameborder="0"
+          title="Streaming Server 2">
+      </iframe>
   </div>
 </body>
 </html>
