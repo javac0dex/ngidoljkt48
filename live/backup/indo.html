@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Streaming - Multi Server</title>
+  <title>Web Streaming - Dual Server</title>
   <style>
       body {
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          justify-content: flex-start; /* Align items to the start of the flex container */
           align-items: center;
           min-height: 100vh;
           background-color: #f0f2f5;
@@ -25,30 +25,16 @@
           text-align: center;
           width: 100%;
           max-width: 900px; /* Max width for the container */
+          margin-bottom: 20px; /* Space between containers if multiple */
       }
       h1 {
           color: #333;
           margin-bottom: 20px;
       }
-      .server-buttons {
-          margin-bottom: 20px;
-      }
-      .server-buttons button {
-          background-color: #007bff;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          margin: 0 5px;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-          transition: background-color 0.3s ease;
-      }
-      .server-buttons button:hover {
-          background-color: #0056b3;
-      }
-      .server-buttons button.active {
-          background-color: #28a745;
+      h2 {
+          color: #555;
+          margin-top: 0;
+          margin-bottom: 15px;
       }
       iframe {
           width: 100%;
@@ -65,41 +51,14 @@
 </head>
 <body>
   <div class="container">
-      <h1>Pilih Server Streaming</h1>
-      <div class="server-buttons">
-          <button id="server1-btn" class="active">Server 1</button>
-          <button id="server2-btn">Server 2</button>
-      </div>
-      <iframe id="stream-iframe" src="https://monmonsport.blogspot.com/p/aff.html" allowfullscreen></iframe>
+      <h1>Web Streaming</h1>
+      <h2>Server 1</h2>
+      <iframe src="https://monmonsport.blogspot.com/p/aff.html" allowfullscreen title="Streaming Server 1"></iframe>
   </div>
 
-  <script>
-      const server1Btn = document.getElementById('server1-btn');
-      const server2Btn = document.getElementById('server2-btn');
-      const streamIframe = document.getElementById('stream-iframe');
-
-      const server1Url = 'https://monmonsport.blogspot.com/p/aff.html';
-      const server2Url = 'https://monmonsport.blogspot.com/p/aff2.html';
-
-      function setActiveButton(button) {
-          server1Btn.classList.remove('active');
-          server2Btn.classList.remove('active');
-          button.classList.add('active');
-      }
-
-      server1Btn.addEventListener('click', () => {
-          streamIframe.src = server1Url;
-          setActiveButton(server1Btn);
-      });
-
-      server2Btn.addEventListener('click', () => {
-          streamIframe.src = server2Url;
-          setActiveButton(server2Btn);
-      });
-
-      // Set initial iframe source and active button
-      streamIframe.src = server1Url;
-      setActiveButton(server1Btn);
-  </script>
+  <div class="container">
+      <h2>Server 2</h2>
+      <iframe src="https://monmonsport.blogspot.com/p/aff2.html" allowfullscreen title="Streaming Server 2"></iframe>
+  </div>
 </body>
 </html>
