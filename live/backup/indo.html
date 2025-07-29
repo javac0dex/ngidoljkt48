@@ -3,43 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Streaming</title>
+  <title>Web Streaming - Multi Server</title>
   <style>
       body {
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
           min-height: 100vh;
           background-color: #f0f2f5;
           margin: 0;
           font-family: sans-serif;
+          padding: 20px;
+          box-sizing: border-box;
       }
-      .video-container {
+      .container {
           background-color: #fff;
           padding: 20px;
           border-radius: 8px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           text-align: center;
-      }
-      video {
-          max-width: 100%;
-          height: auto;
-          border-radius: 4px;
+          width: 100%;
+          max-width: 900px; /* Max width for the container */
       }
       h1 {
           color: #333;
           margin-bottom: 20px;
       }
+      .server-buttons {
+          margin-bottom: 20px;
+      }
+      .server-buttons button {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          margin: 0 5px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s ease;
+      }
+      .server-buttons button:hover {
+          background-color: #0056b3;
+      }
+      .server-buttons button.active {
+          background-color: #28a745;
+      }
+      iframe {
+          width: 100%;
+          height: 500px; /* Adjust height as needed */
+          border: 1px solid #ddd;
+          border-radius: 4px;
+      }
+      @media (max-width: 768px) {
+          iframe {
+              height: 300px;
+          }
+      }
   </style>
 </head>
 <body>
-  <div class="video-container">
-      <h1>Live Stream</h1>
-      <video width="800" height="450" controls preload="none" title="Live Stream Video">
-          <source src="https://tglmp04.akamaized.net/out/v1/400fc0702dee453bb33ebcc29466e58a/manifest.mpd" type="application/dash+xml">
-          <p>Browser Anda tidak mendukung tag video.</p>
-          <p>Silakan coba peramban web yang berbeda atau instal plugin yang diperlukan.</p>
-      </video>
+  <div class="container">
+      <h1>Pilih Server Streaming</h1>
+      <div class="server-buttons">
+          <button id="server1-btn" class="active">Server 1</button>
+          <button id="server2-btn">Server 2</button>
+      </div>
+      <iframe id="stream-iframe" src="https://monmonsport.blogspot.com/p/aff.html" allowfullscreen></iframe>
   </div>
+
+  <script>
+      const server1Btn = document.getElementById('server1-btn');
+      const server2Btn = document.getElementById('server2-btn');
+      const streamIframe = document.getElementById('stream-iframe');
+
+      const server1Url = 'https://monmonsport.blogspot.com/p/aff.html';
+      const server2Url = 'https://monmonsport.blogspot.com/p/aff2.html';
+
+      function setActiveButton(button) {
+          server1Btn.classList.remove('active');
+          server2Btn.classList.remove('active');
+          button.classList.add('active');
+      }
+
+      server1Btn.addEventListener('click', () => {
+          streamIframe.src = server1Url;
+          setActiveButton(server1Btn);
+      });
+
+      server2Btn.addEventListener('click', () => {
+          streamIframe.src = server2Url;
+          setActiveButton(server2Btn);
+      });
+
+      // Set initial iframe source and active button
+      streamIframe.src = server1Url;
+      setActiveButton(server1Btn);
+  </script>
 </body>
 </html>
