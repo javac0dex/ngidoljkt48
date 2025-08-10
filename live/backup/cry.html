@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show Theater - NGIDOL JKT48</title>
-    <meta name="description" content="Pajama Drive - Professional streaming experience">
-    <meta name="keywords" content="show theater, streaming, entertainment, JKT48">
+    <meta name="description" content="Professional streaming experience">
+    <meta name="keywords" content="show theater, streaming, entertainment">
     
-     Google Fonts 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-     Lucide Icons 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-     YouTube IFrame API 
     <script src="https://www.youtube.com/iframe_api"></script>
     
     <style>
@@ -37,7 +32,6 @@
             padding: 0 1rem;
         }
 
-        /* Login Screen Styles */
         .login-screen {
             min-height: 100vh;
             display: flex;
@@ -167,33 +161,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Main Content Styles */
         .main-content {
             display: none;
             padding: 2rem 0;
+            background: transparent; /* Ensure no white background */
         }
 
-        .main-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .main-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .main-subtitle {
-            color: #d1d5db;
-            font-size: 1.125rem;
-        }
-
-        /* JKT48 Video Player Styles */
         .jkt48-video-container {
             max-width: 1200px;
             margin: 0 auto 2rem;
@@ -211,11 +184,10 @@
             height: 100%;
         }
 
-        /* YouTube iframe will be injected here */
         #jkt48Player {
             width: 100%;
             height: 100%;
-            position: absolute; /* Ensure it fills the wrapper */
+            position: absolute;
             top: 0;
             left: 0;
         }
@@ -224,19 +196,19 @@
             position: absolute;
             inset: 0;
             background: rgba(0, 0, 0, 0.2);
-            z-index: 1; /* Above player, below controls */
+            z-index: 1;
         }
 
         .jkt48-controls-overlay {
             position: absolute;
             inset: 0;
             transition: opacity 0.3s ease;
-            z-index: 2; /* Above overlay */
+            z-index: 2;
         }
 
         .jkt48-controls-overlay.hidden {
             opacity: 0;
-            pointer-events: none; /* Disable interaction when hidden */
+            pointer-events: none;
         }
 
         .jkt48-play-button {
@@ -248,7 +220,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            z-index: 3; /* Above controls overlay */
+            z-index: 3;
         }
 
         .jkt48-play-button-content {
@@ -353,7 +325,7 @@
             border-radius: 9999px;
             cursor: pointer;
             position: relative;
-            -webkit-appearance: none; /* Remove default styling for range input */
+            -webkit-appearance: none;
             appearance: none;
             outline: none;
         }
@@ -366,7 +338,7 @@
             background: white;
             border-radius: 50%;
             cursor: pointer;
-            margin-top: -0.25rem; /* Center thumb vertically */
+            margin-top: -0.25rem;
         }
 
         .jkt48-volume-slider::-moz-range-thumb {
@@ -385,7 +357,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; /* Allow clicks to pass through to slider */
+            pointer-events: none;
         }
 
         .jkt48-time-display {
@@ -473,7 +445,7 @@
             align-items: center;
             justify-content: center;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 4; /* Highest z-index for loading */
+            z-index: 4;
         }
 
         .jkt48-spinner {
@@ -489,137 +461,6 @@
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
-        }
-
-        .view-counter {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
-        .view-badge {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .main-title {
-                font-size: 3rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .info-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-
-        .info-card {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(55, 65, 81, 0.7);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #10b981;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .info-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .info-text {
-            color: #d1d5db;
-            font-size: 0.875rem;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            background: transparent;
-            width: 100%;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-
-        .btn-yellow {
-            border-color: #eab308;
-            color: #facc15;
-        }
-
-        .btn-yellow:hover {
-            background: #eab308;
-            color: #000000;
-        }
-
-        .btn-blue {
-            border-color: #3b82f6;
-            color: #60a5fa;
-        }
-
-        .btn-blue:hover {
-            background: #3b82f6;
-            color: #ffffff;
-        }
-
-        .btn-green {
-            border-color: #25d366;
-            color: #ffffff;
-            background: #25d366;
-        }
-
-        .btn-green:hover {
-            background: #128c7e;
-            border-color: #128c7e;
-        }
-
-        .member-content {
-            text-align: center;
-            padding: 1rem 0;
-            color: #d1d5db;
         }
 
         .hidden {
@@ -647,24 +488,11 @@
         .text-purple { color: #8b5cf6; }
         .text-red { color: #ef4444; }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .login-card {
                 padding: 1.5rem;
             }
             
-            .main-title {
-                font-size: 2rem;
-            }
-            
-            .info-grid {
-                gap: 1rem;
-            }
-            
-            .info-card {
-                padding: 1rem;
-            }
-
             .jkt48-controls-left {
                 gap: 0.5rem;
             }
@@ -686,7 +514,6 @@
 </head>
 
 <body>
-     Login Screen 
     <div id="loginScreen" class="login-screen">
         <div class="login-card fade-in">
             <div class="login-header">
@@ -721,44 +548,29 @@
         </div>
     </div>
 
-     Main Content 
     <div id="mainContent" class="main-content">
         <div class="container">
-             Header 
-            <div class="main-header">
-                <h1 class="main-title">SHOW THEATER</h1>
-                <p class="main-subtitle">Pajama Drive - Sabtu, 2 Ags 2025</p>
-            </div>
-
-             JKT48 Video Player 
             <div class="jkt48-video-container" id="jkt48VideoContainer">
                 <div class="jkt48-video-wrapper">
-                     YouTube Player will be injected here 
                     <div class="jkt48-player" id="jkt48Player"></div>
                     
-                     Overlay untuk mencegah klik langsung 
                     <div class="jkt48-video-overlay" id="jkt48VideoOverlay"></div>
                     
-                     Overlay Kontrol 
                     <div class="jkt48-controls-overlay" id="jkt48ControlsOverlay">
                         
-                         Tombol Play Utama 
                         <button class="jkt48-play-button" id="jkt48PlayButton">
                             <div class="jkt48-play-button-content">
                                 <span id="jkt48PlayText">PUTAR</span>
                             </div>
                         </button>
                         
-                         Kontrol Bawah 
                         <div class="jkt48-bottom-controls">
                             
-                             Progress Bar 
                             <div class="jkt48-progress-bar" id="jkt48ProgressBar">
                                 <div class="jkt48-progress-fill" id="jkt48ProgressFill"></div>
                                 <div class="jkt48-progress-handle" id="jkt48ProgressHandle"></div>
                             </div>
                             
-                             Baris Kontrol 
                             <div class="jkt48-controls-row">
                                 <div class="jkt48-controls-left">
                                     <button class="jkt48-control-btn" id="jkt48PlayPauseBtn">
@@ -784,7 +596,6 @@
                                     <div class="jkt48-quality-selector">
                                         <button class="jkt48-control-btn" id="jkt48QualityBtn">KUALITAS 720P</button>
                                         <div class="jkt48-quality-menu" id="jkt48QualityMenu">
-                                             Quality options will be dynamically populated by JS 
                                         </div>
                                     </div>
                                     <button class="jkt48-control-btn" id="jkt48FullscreenBtn">
@@ -795,101 +606,16 @@
                         </div>
                     </div>
                     
-                     Badge Live 
                     <div class="jkt48-live-badge" id="jkt48LiveBadge">
                         <div class="jkt48-live-dot"></div>
                         LIVE
                     </div>
                     
-                     Badge Kualitas 
                     <div class="jkt48-quality-badge" id="jkt48QualityBadge">720P HD</div>
                     
-                     Loading Player 
                     <div class="jkt48-loading-indicator" id="jkt48LoadingIndicator">
                         <div class="jkt48-spinner"></div>
                         <div>Memuat player...</div>
-                    </div>
-                </div>
-            </div>
-
-             View Counter 
-            <div class="view-counter">
-                <div class="view-badge">
-                    <i data-lucide="eye" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                    <span>Views: <span id="viewCount">--</span></span>
-                </div>
-            </div>
-
-             Info Cards 
-            <div class="info-grid">
-                 Important Notes 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="alert-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title">Penting</h3>
-                    </div>
-                    
-                    <div class="info-item">
-                        <i data-lucide="refresh-cw" class="text-blue" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
-                        <p class="info-text">Jika video tidak muncul, silakan refresh halaman</p>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div style="width: 1.25rem; height: 1.25rem; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 0.125rem; flex-shrink: 0;">
-                            <div style="width: 0.5rem; height: 0.5rem; background: #000; border-radius: 50%; animation: pulse 2s infinite;"></div>
-                        </div>
-                        <p class="info-text">Jika loading terlalu lama, pastikan koneksi internet stabil</p>
-                    </div>
-                    
-                    <button onclick="refreshPage()" class="action-btn btn-yellow">
-                        <i data-lucide="refresh-cw" style="width: 1rem; height: 1rem;"></i>
-                        Refresh Halaman
-                    </button>
-                    
-                    <a href="https://showtheater.my.id/live/june/pee/52012-22juni/backup"
-                        target="_blank"
-                        class="action-btn btn-blue">
-                        Backup Live Streaming
-                    </a>
-                </div>
-
-                 Member List 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="users" class="text-purple" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title" style="color: #8b5cf6;">Daftar Member</h3>
-                    </div>
-                    <div class="member-content">
-                        <p>Delynn, Erine, Lily, Trisha, Nachia, Oline, Kimmy, Auwia, Giaa, Ekin, Mikaela, Intan.</p>
-                    </div>
-                </div>
-
-                 Contact Person 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="message-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title">Contact Person</h3>
-                    </div>
-                    
-                    <div class="info-item">
-                        <i data-lucide="phone" class="text-green" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
-                        <div>
-                            <p class="info-text">Butuh bantuan atau ada pertanyaan?</p>
-                            <p class="info-text">Hubungi admin kami</p>
-                        </div>
-                    </div>
-                    
-                    <a href="https://wa.me/628970400899?text=Halo,%20saya%20ingin%20bertanya%20tentang%20Show%20Theater"
-                        target="_blank"
-                        class="action-btn btn-green">
-                        <i data-lucide="message-circle" style="width: 1rem; height: 1rem;"></i>
-                        Chat WhatsApp Admin
-                    </a>
-                    
-                    <div style="text-align: center; margin-top: 0.5rem;">
-                        <small style="color: #9ca3af; font-size: 0.75rem;">
-                            +62 897-0400-899
-                        </small>
                     </div>
                 </div>
             </div>
@@ -897,19 +623,16 @@
     </div>
 
     <script>
-        // Configuration
         const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
-        const VIDEO_ID = 'RaXSh7qVZoI'; // ID video YouTube Anda
-        const API_KEY = 'AIzaSyAboyR9wg4IXgqiuf9c6ZvSIxRvG2Ck4fI'; // Kunci API YouTube Data Anda
+        const VIDEO_ID = 'RaXSh7qVZoI';
+        const API_KEY = 'AIzaSyAboyR9wg4IXgqiuf9c6ZvSIxRvG2Ck4fI';
 
-        // Global variables
         let player;
         let isAuthenticated = false;
         let viewCountInterval;
         let controlsTimeout;
-        let currentQuality = 'auto'; // Default quality
+        let currentQuality = 'auto';
 
-        // DOM elements
         const loginScreen = document.getElementById('loginScreen');
         const mainContent = document.getElementById('mainContent');
         const passwordInput = document.getElementById('passwordInput');
@@ -936,23 +659,22 @@
         const fullscreenBtn = document.getElementById('jkt48FullscreenBtn');
         const loadingIndicator = document.getElementById('jkt48LoadingIndicator');
 
-        // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
         });
 
-        // YouTube API ready callback
         function onYouTubeIframeAPIReady() {
             console.log('YouTube API ready');
+            loadingIndicator.style.display = 'flex'; // Show loading indicator initially
             player = new YT.Player('jkt48Player', {
                 videoId: VIDEO_ID,
                 playerVars: {
                     'autoplay': 1,
-                    'controls': 0, // We use custom controls
+                    'controls': 0,
                     'modestbranding': 1,
                     'rel': 0,
                     'enablejsapi': 1,
-                    'iv_load_policy': 3 // Disable annotations
+                    'iv_load_policy': 3
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -965,29 +687,21 @@
 
         function onPlayerReady(event) {
             console.log('Player ready');
-            // Set initial volume
-            player.setVolume(100); // Max volume
-            volumeSlider.value = 1; // Update slider UI
+            player.setVolume(100);
+            volumeSlider.value = 1;
             volumeFill.style.width = '100%';
 
-            // Hide main play button if autoplay works
-            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+            if (event.data === YT.PlayerState.PLAYING) {
                 hideMainPlayButton();
+                loadingIndicator.style.display = 'none';
             } else {
                 showMainPlayButton();
+                loadingIndicator.style.display = 'none'; // Hide if not playing immediately
             }
             
-            // Populate quality options
             populateQualityOptions();
-
-            // Start updating progress and time
             setInterval(updateProgressAndTime, 100);
-
-            // Initial hide controls
             showControlsTemporarily();
-
-            // Hide loading indicator
-            loadingIndicator.style.display = 'none';
         }
 
         function onPlayerStateChange(event) {
@@ -996,11 +710,12 @@
                     isPlaying = true;
                     hideMainPlayButton();
                     loadingIndicator.style.display = 'none';
-                    showControlsTemporarily(); // Reset auto-hide timer
+                    showControlsTemporarily();
                     break;
                 case YT.PlayerState.PAUSED:
                     isPlaying = false;
                     showMainPlayButton();
+                    loadingIndicator.style.display = 'none';
                     break;
                 case YT.PlayerState.BUFFERING:
                     loadingIndicator.style.display = 'flex';
@@ -1031,13 +746,11 @@
             alert('Terjadi kesalahan pada pemutar video. Silakan coba refresh halaman.');
         }
 
-        // Password form handler
         document.getElementById('passwordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const password = passwordInput.value.trim();
             
-            // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = `
                 <div class="loading-spinner"></div>
@@ -1045,40 +758,31 @@
             `;
             errorAlert.classList.add('hidden');
             
-            // Simulate authentication delay
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             if (VALID_PASSWORDS.includes(password)) {
                 isAuthenticated = true;
                 showMainContent();
                 startViewCounter();
-                // Player will be initialized by onYouTubeIframeAPIReady
             } else {
-                // Show error
                 errorAlert.classList.remove('hidden');
-                
-                // Reset button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `
                     <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
                     <span>Masuk</span>
                 `;
                 lucide.createIcons();
-                
-                // Clear password
                 passwordInput.value = '';
                 passwordInput.focus();
             }
         });
         
-        // Show main content
         function showMainContent() {
             loginScreen.style.display = 'none';
             mainContent.style.display = 'block';
             mainContent.classList.add('fade-in');
         }
         
-        // Start view counter
         async function fetchViewCount() {
             try {
                 const response = await fetch(
@@ -1088,22 +792,21 @@
                                 
                 if (data.items && data.items[0]) {
                     const views = parseInt(data.items[0].statistics.viewCount).toLocaleString();
-                    viewCountSpan.textContent = views;
+                    // viewCountSpan.textContent = views; // Removed as per request
                 } else {
-                    viewCountSpan.textContent = 'N/A';
+                    // viewCountSpan.textContent = 'N/A'; // Removed as per request
                 }
             } catch (error) {
                 console.error('Error fetching view count:', error);
-                viewCountSpan.textContent = 'Error';
+                // viewCountSpan.textContent = 'Error'; // Removed as per request
             }
         }
 
         function startViewCounter() {
-            fetchViewCount(); // Initial fetch
-            viewCountInterval = setInterval(fetchViewCount, 30000); // Update every 30 seconds
+            // fetchViewCount(); // Removed as per request
+            // viewCountInterval = setInterval(fetchViewCount, 30000); // Removed as per request
         }
         
-        // Video player functions
         function togglePlay() {
             if (!player) return;
 
@@ -1170,7 +873,7 @@
         }
         
         function updateProgressAndTime() {
-            if (!player || !player.getDuration) return; // Ensure player is ready
+            if (!player || !player.getDuration) return;
 
             const current = player.getCurrentTime();
             const total = player.getDuration();
@@ -1200,7 +903,7 @@
             if (!player || !player.getAvailablePlaybackQualities) return;
 
             const availableQualities = player.getAvailablePlaybackQualities();
-            qualityMenu.innerHTML = ''; // Clear existing options
+            qualityMenu.innerHTML = '';
 
             const qualityMap = {
                 'highres': 'Highest',
@@ -1210,7 +913,7 @@
                 'medium': '360P',
                 'small': '240P',
                 'tiny': '144P',
-                'auto': 'Auto' // YouTube's default auto quality
+                'auto': 'Auto'
             };
 
             availableQualities.forEach(q => {
@@ -1225,18 +928,16 @@
                 qualityMenu.appendChild(optionDiv);
             });
 
-            // Set initial display
             updateQualityDisplay(player.getPlaybackQuality());
         }
 
         function setQuality(newQuality) {
             if (!player) return;
             player.setPlaybackQuality(newQuality);
-            currentQuality = newQuality; // Update state immediately for UI
+            currentQuality = newQuality;
             updateQualityDisplay(newQuality);
             qualityMenu.classList.remove('show');
             
-            // Update active class in menu
             document.querySelectorAll('.jkt48-quality-option').forEach(option => {
                 option.classList.remove('active');
                 if (option.dataset.quality === newQuality) {
@@ -1282,25 +983,21 @@
             }
         }
         
-        // Hide controls when mouse leaves container, if playing
         jkt48VideoContainer.addEventListener('mouseleave', function() {
             if (player && (player.getPlayerState() === YT.PlayerState.PLAYING || player.getPlayerState() === YT.PlayerState.BUFFERING)) {
                 clearTimeout(controlsTimeout);
                 controlsTimeout = setTimeout(() => {
                     controlsOverlay.classList.add('hidden');
-                }, 1000); // Shorter delay for leaving
+                }, 1000);
             }
         });
 
-        // Show controls when mouse enters container
         jkt48VideoContainer.addEventListener('mouseenter', showControlsTemporarily);
         
-        // Refresh page function
         function refreshPage() {
             window.location.reload();
         }
         
-        // Security measures
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
@@ -1312,7 +1009,6 @@
             }
         });
         
-        // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
             if (viewCountInterval) {
                 clearInterval(viewCountInterval);
@@ -1322,7 +1018,6 @@
             }
         });
         
-        // Close quality menu when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.jkt48-quality-selector') && qualityMenu.classList.contains('show')) {
                 qualityMenu.classList.remove('show');
