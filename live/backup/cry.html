@@ -353,6 +353,28 @@
             border-radius: 9999px;
             cursor: pointer;
             position: relative;
+            -webkit-appearance: none; /* Remove default styling for range input */
+            appearance: none;
+            outline: none;
+        }
+
+        .jkt48-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -0.25rem; /* Center thumb vertically */
+        }
+
+        .jkt48-volume-slider::-moz-range-thumb {
+            width: 1rem;
+            height: 1rem;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         .jkt48-volume-fill {
@@ -360,6 +382,10 @@
             background: white;
             border-radius: 9999px;
             transition: width 0.1s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* Allow clicks to pass through to slider */
         }
 
         .jkt48-time-display {
@@ -689,7 +715,7 @@
                 
                 <button type="submit" id="submitBtn" class="submit-btn">
                     <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
-                    <span id="submitText">Masuk</span>
+                    <span>Masuk</span>
                 </button>
             </form>
         </div>
@@ -745,9 +771,8 @@
                                         <button class="jkt48-control-btn" id="jkt48VolumeBtn">
                                             <span id="jkt48VolumeText">SUARA</span>
                                         </button>
-                                        <div class="jkt48-volume-slider" id="jkt48VolumeSlider">
-                                            <div class="jkt48-volume-fill" id="jkt48VolumeFill"></div>
-                                        </div>
+                                        <input type="range" id="jkt48VolumeSlider" min="0" max="1" step="0.01" value="1" class="jkt48-volume-slider">
+                                        <div class="jkt48-volume-fill" id="jkt48VolumeFill"></div>
                                     </div>
                                     
                                     <div class="jkt48-time-display" id="jkt48TimeDisplay">
@@ -874,8 +899,8 @@
     <script>
         // Configuration
         const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
-        const VIDEO_ID = 'dQw4w9WgXcQ'; // Ganti dengan ID video YouTube Anda
-        const API_KEY = 'YOUR_YOUTUBE_DATA_API_KEY'; // Ganti dengan kunci API YouTube Data Anda
+        const VIDEO_ID = 'RaXSh7qVZoI'; // ID video YouTube Anda
+        const API_KEY = 'AIzaSyAboyR9wg4IXgqiuf9c6ZvSIxRvG2Ck4fI'; // Kunci API YouTube Data Anda
 
         // Global variables
         let player;
@@ -892,8 +917,8 @@
         const errorAlert = document.getElementById('errorAlert');
         const viewCountSpan = document.getElementById('viewCount');
 
-        const jkt48PlayerDiv = document.getElementById('jkt48Player');
         const jkt48VideoContainer = document.getElementById('jkt48VideoContainer');
+        const jkt48PlayerDiv = document.getElementById('jkt48Player');
         const controlsOverlay = document.getElementById('jkt48ControlsOverlay');
         const playButton = document.getElementById('jkt48PlayButton');
         const playPauseBtn = document.getElementById('jkt48PlayPauseBtn');
@@ -942,6 +967,7 @@
             console.log('Player ready');
             // Set initial volume
             player.setVolume(100); // Max volume
+            volumeSlider.value = 1; // Update slider UI
             volumeFill.style.width = '100%';
 
             // Hide main play button if autoplay works
@@ -1001,7 +1027,6 @@
 
         function onPlayerError(event) {
             console.error('YouTube Player Error:', event.data);
-            // You might want to display an error message to the user
             loadingIndicator.style.display = 'none';
             alert('Terjadi kesalahan pada pemutar video. Silakan coba refresh halaman.');
         }
@@ -1054,21 +1079,35 @@
         }
         
         // Start view counter
+        async function fetchViewCount() {
+            try {
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${VIDEO_ID}&key=${API_KEY}`
+                );
+                const data = await response.json();
+                                
+                if (data.items && data.items[0]) {
+                    const views = parseInt(data.items[0].statistics.viewCount).toLocaleString();
+                    viewCountSpan.textContent = views;
+                } else {
+                    viewCountSpan.textContent = 'N/A';
+                }
+            } catch (error) {
+                console.error('Error fetching view count:', error);
+                viewCountSpan.textContent = 'Error';
+            }
+        }
+
         function startViewCounter() {
-            viewCountSpan.textContent = '1,247';
-            
-            viewCountInterval = setInterval(() => {
-                const current = parseInt(viewCountSpan.textContent.replace(/,/g, ''));
-                const newCount = current + Math.floor(Math.random() * 5);
-                viewCountSpan.textContent = newCount.toLocaleString();
-            }, 30000);
+            fetchViewCount(); // Initial fetch
+            viewCountInterval = setInterval(fetchViewCount, 30000); // Update every 30 seconds
         }
         
         // Video player functions
         function togglePlay() {
             if (!player) return;
 
-            if (isPlaying) {
+            if (player.getPlayerState() === YT.PlayerState.PLAYING || player.getPlayerState() === YT.PlayerState.BUFFERING) {
                 player.pauseVideo();
             } else {
                 player.playVideo();
@@ -1076,7 +1115,7 @@
         }
         
         function updatePlayButton() {
-            if (isPlaying) {
+            if (player && (player.getPlayerState() === YT.PlayerState.PLAYING || player.getPlayerState() === YT.PlayerState.BUFFERING)) {
                 playPauseText.textContent = 'JEDA';
             } else {
                 playPauseText.textContent = 'PUTAR';
@@ -1098,33 +1137,37 @@
         }
         
         function handleProgressClick(e) {
-            if (!player) return;
+            if (!player || !player.getDuration) return;
             const rect = progressBar.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const newTime = (clickX / rect.width) * player.getDuration();
             player.seekTo(newTime, true);
         }
         
-        function handleVolumeClick(e) {
+        function handleVolumeChange() {
             if (!player) return;
-            const rect = volumeSlider.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            let newVolume = (clickX / rect.width) * 100;
-            newVolume = Math.max(0, Math.min(100, newVolume)); // Clamp between 0 and 100
+            const newVolume = parseFloat(volumeSlider.value) * 100;
             player.setVolume(newVolume);
             volumeFill.style.width = newVolume + '%';
+            if (newVolume > 0 && player.isMuted()) {
+                player.unMute();
+            } else if (newVolume === 0 && !player.isMuted()) {
+                player.mute();
+            }
         }
 
-        volumeBtn.addEventListener('click', function() {
+        function toggleMute() {
             if (!player) return;
             if (player.isMuted()) {
                 player.unMute();
+                volumeSlider.value = player.getVolume() / 100;
                 volumeFill.style.width = player.getVolume() + '%';
             } else {
                 player.mute();
+                volumeSlider.value = 0;
                 volumeFill.style.width = '0%';
             }
-        });
+        }
         
         function updateProgressAndTime() {
             if (!player || !player.getDuration) return; // Ensure player is ready
@@ -1136,6 +1179,9 @@
                 const progress = (current / total) * 100;
                 progressFill.style.width = progress + '%';
                 progressHandle.style.left = progress + '%';
+            } else {
+                progressFill.style.width = '0%';
+                progressHandle.style.left = '0%';
             }
             timeDisplay.textContent = `${formatTime(current)} / ${formatTime(total)}`;
         }
@@ -1229,7 +1275,7 @@
             controlsOverlay.classList.remove('hidden');
             
             clearTimeout(controlsTimeout);
-            if (isPlaying) {
+            if (player && (player.getPlayerState() === YT.PlayerState.PLAYING || player.getPlayerState() === YT.PlayerState.BUFFERING)) {
                 controlsTimeout = setTimeout(() => {
                     controlsOverlay.classList.add('hidden');
                 }, 3000);
@@ -1238,7 +1284,7 @@
         
         // Hide controls when mouse leaves container, if playing
         jkt48VideoContainer.addEventListener('mouseleave', function() {
-            if (isPlaying) {
+            if (player && (player.getPlayerState() === YT.PlayerState.PLAYING || player.getPlayerState() === YT.PlayerState.BUFFERING)) {
                 clearTimeout(controlsTimeout);
                 controlsTimeout = setTimeout(() => {
                     controlsOverlay.classList.add('hidden');
