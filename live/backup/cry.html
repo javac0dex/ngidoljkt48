@@ -13,6 +13,9 @@
      Lucide Icons 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
+     YouTube IFrame API 
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <style>
         * {
             margin: 0;
@@ -172,64 +175,16 @@
             margin: 0 auto 2rem;
         }
         .video-wrapper {
-            position: relative; /* Added for controls positioning */
-            width: 100%; /* Added for responsiveness */
+            position: relative;
             aspect-ratio: 16 / 9;
             background: #000000;
             border-radius: 0.75rem;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        video {
+        #youtube-player {
             width: 100%;
-            height: 100%; /* Ensure video fills wrapper */
-            display: block;
-        }
-        .controls {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 10; /* Ensure controls are above video */
-        }
-        .controls button, .controls input {
-            margin-right: 10px;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 5px; /* Added padding for better click area */
-        }
-        .controls input[type="range"] {
-            flex-grow: 1; /* Allow volume slider to take available space */
-            -webkit-appearance: none; /* Remove default styling for range input */
-            appearance: none;
-            height: 4px;
-            background: #555;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity .2s;
-            border-radius: 2px;
-        }
-        .controls input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #10b981;
-            cursor: pointer;
-        }
-        .controls input[type="range"]::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #10b981;
-            cursor: pointer;
+            height: 100%;
         }
         .view-counter {
             display: flex;
@@ -381,6 +336,33 @@
             background: #25d366;
             color: #ffffff;
         }
+        /* Quality Selector Styling */
+        .quality-selector-container {
+            display: flex;
+            justify-content: flex-end; /* Align to the right */
+            margin-top: 10px;
+            padding-right: 10px; /* Add some padding to match controls */
+        }
+        #qualitySelector {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            -webkit-appearance: none; /* Remove default arrow */
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M287%2C197.9L146.2%2C57.1L5.4%2C197.9h281.6z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 8px top 50%;
+            background-size: 12px auto;
+        }
+        #qualitySelector option {
+            background: #1a1a1a;
+            color: white;
+        }
         @media (min-width: 1024px) {
             .info-grid {
                 grid-template-columns: 1fr 1fr 1fr;
@@ -434,18 +416,22 @@
              Video Player 
             <div class="video-container">
                 <div class="video-wrapper">
-                    <video id="video" preload="metadata">
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                        Browser Anda tidak mendukung video.
-                    </video>
-                    <div class="controls">
-                        <button id="playPause">▶️</button>
-                        <input type="range" id="volume" min="0" max="1" step="0.05" value="1">
-                        <button id="fullscreen">⛶</button>
-                    </div>
+                    <div id="youtube-player"></div>
                 </div>
 
-                 View Counter (Note: This will no longer function as it relied on YouTube API) 
+                 Quality Selector 
+                <div class="quality-selector-container">
+                    <select id="qualitySelector">
+                        <option value="small">240p</option>
+                        <option value="medium">360p</option>
+                        <option value="large">480p</option>
+                        <option value="hd720">720p</option>
+                        <option value="hd1080">1080p</option>
+                        <option value="highres">Highest</option>
+                    </select>
+                </div>
+
+                 View Counter 
                 <div class="view-counter">
                     <div class="view-badge">
                         <i data-lucide="eye" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
@@ -536,22 +522,25 @@
     <script>
         // Configuration
         const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
-        // Removed VIDEO_ID and API_KEY as they are for YouTube API
+        const VIDEO_ID = 'EdrMAvSwahU';
+        const API_KEY = 'AIzaSyAboyR9wg4IXgqiuf9c6ZvSIxRvG2Ck4fI';
 
         // Global variables
+        let player;
         let isAuthenticated = false;
-        // Removed viewCountInterval as it was for YouTube API
-
-        // Video player elements
-        const video = document.getElementById("video");
-        const playPauseBtn = document.getElementById("playPause");
-        const volumeSlider = document.getElementById("volume");
-        const fullscreenBtn = document.getElementById("fullscreen");
+        let viewCountInterval;
 
         // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
         });
+
+        // YouTube API ready callback
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube API ready');
+            // Only initialize player if authenticated or if we want to pre-load it
+            // For this setup, we'll initialize it after successful login
+        }
 
         // Password form handler
         document.getElementById('passwordForm').addEventListener('submit', async function(e) {
@@ -579,8 +568,10 @@
             if (VALID_PASSWORDS.includes(password)) {
                 isAuthenticated = true;
                 showMainContent();
-                loadVideo(); // Call loadVideo to initialize custom player
-                // Removed fetchViewCount and its interval as they are for YouTube API
+                loadVideo(); // Call loadVideo to initialize YouTube player
+                fetchViewCount();
+                // Update view count every 30 seconds
+                viewCountInterval = setInterval(fetchViewCount, 30000);
             } else {
                 // Show error
                 errorAlert.classList.remove('hidden');
@@ -606,38 +597,67 @@
             document.getElementById('mainContent').classList.add('fade-in');
         }
 
-        // Load custom HTML5 video
+        // Load YouTube video
         function loadVideo() {
-            // The video element is already in the HTML, just ensure it's ready
-            // You can optionally call video.play() here if you want it to autoplay after login
-            // video.play();
-            console.log('Custom video player loaded.');
+            if (window.YT && window.YT.Player) {
+                player = new YT.Player('youtube-player', {
+                    videoId: VIDEO_ID,
+                    playerVars: {
+                        'autoplay': 1,
+                        'controls': 1,
+                        'modestbranding': 1,
+                        'rel': 0
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onError': function(error) {
+                            console.error('Player error:', error);
+                        }
+                    }
+                });
+            } else {
+                // Retry after a short delay if YT is not ready
+                setTimeout(loadVideo, 500);
+            }
         }
 
-        // Custom Video Player Controls
-        playPauseBtn.addEventListener("click", () => {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.textContent = "⏸";
-            } else {
-                video.pause();
-                playPauseBtn.textContent = "▶️";
-            }
-        });
+        // YouTube Player Ready Callback
+        function onPlayerReady(event) {
+            console.log('YouTube Player ready');
+            const qualitySelector = document.getElementById("qualitySelector");
 
-        volumeSlider.addEventListener("input", () => {
-            video.volume = volumeSlider.value;
-        });
-
-        fullscreenBtn.addEventListener("click", () => {
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.webkitRequestFullscreen) { /* Safari */
-                video.webkitRequestFullscreen();
-            } else if (video.msRequestFullscreen) { /* IE11 */
-                video.msRequestFullscreen();
+            // Set initial quality to auto or a default
+            const availableQualities = event.target.getAvailableQualityLevels();
+            if (availableQualities.length > 0) {
+                // Optionally set a default quality, e.g., 'auto' or 'hd720'
+                // event.target.setPlaybackQuality('hd720');
             }
-        });
+
+            // Populate quality selector with available qualities (optional, but good for dynamic content)
+            // For now, we'll stick to the hardcoded options as per user request.
+
+            qualitySelector.addEventListener("change", function() {
+                player.setPlaybackQuality(this.value);
+            });
+        }
+
+        // Fetch view count from YouTube API
+        async function fetchViewCount() {
+            try {
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${VIDEO_ID}&key=${API_KEY}`
+                );
+                const data = await response.json();
+
+                if (data.items && data.items[0]) {
+                    const views = parseInt(data.items[0].statistics.viewCount).toLocaleString();
+                    document.getElementById('viewCount').textContent = views;
+                }
+            } catch (error) {
+                console.error('Error fetching view count:', error);
+                document.getElementById('viewCount').textContent = 'Error';
+            }
+        }
 
         // Refresh page function
         function refreshPage() {
@@ -655,9 +675,14 @@
             }
         });
 
-        // Cleanup on page unload (no specific cleanup needed for custom video player)
+        // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
-            // No specific cleanup for custom video player needed here
+            if (viewCountInterval) {
+                clearInterval(viewCountInterval);
+            }
+            if (player && typeof player.destroy === 'function') {
+                player.destroy(); // Clean up YouTube player
+            }
         });
     </script>
 </body>
