@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Theater - NGIDOL JKT48</title>
-    <meta name="description" content="Pajama Drive - Live Streaming">
-    
-     Google Fonts 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-     Lucide Icons 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-     YouTube IFrame API 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    
+    <title>JKT48 Special Concert - FULL HOUSE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #d4af37;
+            --primary-dark: #b8941f;
+            --secondary: #ff6b35;
+            --accent: #10b981;
+            --whatsapp: #25d366;
+            --background: #0a0a0a;
+            --surface: #1a1a1a;
+            --surface-light: #2a2a2a;
+            --text: #ffffff;
+            --text-muted: #cccccc;
+            --border: #444444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gold: #ffd700;
+            --gold-dark: #ffb347;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -23,678 +33,1426 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
-            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 70%, #000000 100%);
+            color: var(--text);
             min-height: 100vh;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        /* Login Screen */
-        .login-screen {
+        .jkt48-concert-container {
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 1rem;
-        }
-
-        .login-card {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(55, 65, 81, 0.7);
-            border-radius: 1rem;
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo-icon {
-            width: 4rem;
-            height: 4rem;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            border-radius: 50%;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-        }
-
-        .login-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-subtitle {
-            color: #d1d5db;
-            font-size: 0.875rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #374151;
-            border: 1px solid #4b5563;
-            border-radius: 0.5rem;
-            color: #ffffff;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: #9ca3af;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border: none;
-            border-radius: 0.5rem;
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .error-alert {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #fca5a5;
-        }
-
-        .loading-spinner {
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid transparent;
-            border-top: 2px solid #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Main Content */
-        .main-content {
-            display: none;
-            padding: 2rem 0;
-        }
-
-        .main-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .main-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .main-subtitle {
-            color: #d1d5db;
-            font-size: 1.125rem;
-        }
-
-        /* Video Player */
-        .video-container {
-            max-width: 1200px;
-            margin: 0 auto 2rem;
-        }
-
-        .video-wrapper {
+            padding: 20px;
             position: relative;
-            aspect-ratio: 16 / 9;
-            background: #000000;
-            border-radius: 0.75rem;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        #youtube-player {
+        .jkt48-concert-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background:
+                radial-gradient(circle at 15% 85%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 179, 71, 0.08) 0%, transparent 50%);
+            z-index: 0;
+            animation: jkt48-shimmer 15s ease-in-out infinite;
         }
 
-        .loading-overlay {
+        @keyframes jkt48-shimmer {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        .jkt48-main-card {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .jkt48-main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--primary), var(--gold), transparent);
+            animation: jkt48-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes jkt48-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .jkt48-logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .jkt48-logo-image {
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 8px 16px rgba(212, 175, 55, 0.4));
+            animation: jkt48-logoGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes jkt48-logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 8px 16px rgba(212, 175, 55, 0.4));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 12px 24px rgba(212, 175, 55, 0.6));
+                transform: scale(1.02);
+            }
+        }
+
+        .jkt48-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--primary), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .jkt48-subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .jkt48-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .jkt48-input-group {
+            position: relative;
+        }
+
+        .jkt48-password-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.4s ease;
+            font-family: inherit;
+            font-weight: 500;
+            box-sizing: border-box;
+        }
+
+        .jkt48-password-input:focus {
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .jkt48-password-input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .jkt48-submit-btn {
+            background: linear-gradient(135deg, var(--gold), var(--primary), var(--gold-dark));
+            color: #000000;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .jkt48-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .jkt48-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .jkt48-submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .jkt48-submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .jkt48-video-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+        }
+
+        .jkt48-video-wrapper {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 0 3px rgba(212, 175, 55, 0.3);
+            background: #000000;
+        }
+
+        .jkt48-player {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+            position: relative;
+            background: #000000;
+        }
+
+        /* Modern Minimalist Video Controls */
+        .jkt48-video-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             z-index: 10;
-            border-radius: 0.75rem;
-        }
-
-        .loading-content {
-            text-align: center;
-        }
-
-        .loading-spinner-large {
-            width: 3rem;
-            height: 3rem;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #10b981;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        /* View Counter */
-        .view-counter {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
-        .view-badge {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-        }
-
-        /* Info Cards */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .main-title {
-                font-size: 3rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .info-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-
-        .info-card {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(55, 65, 81, 0.7);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #10b981;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .info-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .info-text {
-            color: #d1d5db;
-            font-size: 0.875rem;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
             background: transparent;
+            cursor: pointer;
         }
 
-        .btn-yellow {
-            border-color: #eab308;
-            color: #facc15;
+        .jkt48-controls-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            background: linear-gradient(to bottom, 
+                rgba(0,0,0,0.8) 0%, 
+                transparent 15%, 
+                transparent 85%, 
+                rgba(0,0,0,0.9) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
         }
 
-        .btn-yellow:hover {
-            background: #eab308;
-            color: #000000;
+        .jkt48-controls-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .btn-blue {
-            border-color: #3b82f6;
-            color: #60a5fa;
+        /* Top Progress Bar - Ultra Thin */
+        .jkt48-top-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 30;
         }
 
-        .btn-blue:hover {
-            background: #3b82f6;
-            color: #ffffff;
+        .jkt48-top-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
         }
 
-        .btn-green {
-            border-color: #25d366;
-            color: #ffffff;
-            background: #25d366;
-        }
-
-        .btn-green:hover {
-            background: #22c55e;
-            border-color: #22c55e;
-        }
-
-        .btn-full {
-            width: 100%;
+        /* Center Play Button */
+        .jkt48-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            margin-top: 0.5rem;
         }
 
-        .member-content {
+        .jkt48-play-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Bottom Controls - Ultra Minimalist */
+        .jkt48-bottom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+        }
+
+        .jkt48-controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .jkt48-controls-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .jkt48-controls-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Modern Control Buttons */
+        .jkt48-control-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .jkt48-control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .jkt48-control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Volume Control */
+        .jkt48-volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .jkt48-volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .jkt48-volume-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            border-radius: 2px;
+            width: 80%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Time Display */
+        .jkt48-time-display {
+            color: white;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            min-width: 100px;
             text-align: center;
-            padding: 1rem 0;
-            color: #d1d5db;
+            font-weight: 500;
         }
 
-        .hidden {
-            display: none !important;
+        /* Settings Gear Icon */
+        .jkt48-settings-control {
+            position: relative;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .login-card {
-                padding: 1.5rem;
-            }
-            
-            .main-title {
-                font-size: 2rem;
-            }
-            
-            .info-grid {
-                gap: 1rem;
-            }
-            
-            .info-card {
-                padding: 1rem;
-            }
+        .jkt48-settings-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+        .jkt48-settings-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .jkt48-settings-menu {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 0;
+            min-width: 120px;
+            display: none;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .jkt48-settings-menu.show {
+            display: block;
+        }
+
+        .jkt48-settings-option {
+            padding: 10px 16px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .jkt48-settings-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .jkt48-settings-option.active {
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            color: black;
+        }
+
+        /* Loading and Status Indicators */
+        .jkt48-loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 40;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .jkt48-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: jkt48-spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        .jkt48-live-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 30;
+            background: #ff0000;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .jkt48-quality-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 30;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
         }
 
         @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes jkt48-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stats and Info Cards */
+        .jkt48-stats-card {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .jkt48-stats-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--gold), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #000000;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .jkt48-stats-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .jkt48-info-card {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9));
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 25px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .jkt48-info-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .jkt48-info-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .jkt48-info-list li {
+            padding: 8px 0;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .jkt48-info-list .jkt48-info-bullet {
+            color: var(--gold);
+            width: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .jkt48-action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .jkt48-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.4s ease;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+            min-width: 130px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .jkt48-btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--primary));
+            color: #000000;
+        }
+
+        .jkt48-btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #e55a2b);
+            color: white;
+        }
+
+        .jkt48-btn-whatsapp {
+            background: linear-gradient(135deg, var(--whatsapp), #22c55e);
+            color: white;
+        }
+
+        .jkt48-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .jkt48-loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--gold);
+            animation: jkt48-spin 1s ease-in-out infinite;
+        }
+
+        .jkt48-logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .jkt48-logout-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 1), rgba(220, 38, 38, 1));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .jkt48-concert-container {
+                padding: 15px;
             }
-            50% {
-                opacity: 0.5;
+
+            .jkt48-main-card {
+                padding: 30px 20px;
+                max-width: 100%;
+            }
+
+            .jkt48-logo-image {
+                max-width: 220px;
+            }
+
+            .jkt48-title {
+                font-size: 24px;
+            }
+
+            .jkt48-subtitle {
+                font-size: 14px;
+            }
+
+            .jkt48-info-card {
+                max-width: 100%;
+            }
+
+            .jkt48-action-buttons {
+                flex-direction: column;
+            }
+
+            .jkt48-btn {
+                min-width: auto;
+                flex: none;
+            }
+
+            .jkt48-controls-row {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .jkt48-volume-control {
+                order: 3;
+                flex-basis: 100%;
+                justify-content: center;
+            }
+
+            .jkt48-volume-slider {
+                width: 150px;
+            }
+
+            .jkt48-play-button {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
             }
         }
 
-        /* Icon colors */
-        .text-green { color: #10b981; }
-        .text-blue { color: #3b82f6; }
-        .text-yellow { color: #f59e0b; }
-        .text-purple { color: #8b5cf6; }
-        .text-red { color: #ef4444; }
+        @media (max-width: 480px) {
+            .jkt48-main-card {
+                padding: 25px 15px;
+            }
+
+            .jkt48-logo-image {
+                max-width: 200px;
+            }
+
+            .jkt48-title {
+                font-size: 22px;
+            }
+
+            .jkt48-password-input, .jkt48-submit-btn {
+                padding: 14px 16px;
+            }
+
+            .jkt48-play-button {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            .jkt48-bottom-controls {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-     Login Screen 
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card fade-in">
-            <div class="login-header">
-                <div class="logo-icon">
-                    <i data-lucide="lock" style="color: white; width: 2rem; height: 2rem;"></i>
-                </div>
-                <h1 class="login-title">SHOW THEATER</h1>
-                <p class="login-subtitle">Pajama Drive - Sabtu, 2 Ags 2025</p>
+    <div class="jkt48-concert-container">
+         Login Card 
+        <div class="jkt48-main-card" id="jkt48MainCard">
+            <div class="jkt48-logo-container">
+                <img alt="JKT48 Full House Logo" class="jkt48-logo-image" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZsM48gr3Io9I3lqLNbF8kuVpsgpULO.png" />
             </div>
+            <h1 class="jkt48-title">JKT48 Special Concert<br />FULL HOUSE</h1>
+            <p class="jkt48-subtitle">26 Juli 2025</p>
+            <p class="jkt48-subtitle">Password sama</p>
             
-            <form id="passwordForm">
-                <input 
-                    type="password"
-                    id="passwordInput"
-                    class="form-input"
-                    placeholder="Masukkan password"
-                    required
-                >
-                
-                <div id="errorAlert" class="error-alert hidden">
-                    <i data-lucide="alert-circle" style="width: 1rem; height: 1rem;"></i>
-                    <span>Password salah. Silakan coba lagi.</span>
+            <form class="jkt48-form" onsubmit="jkt48CheckPassword(event)">
+                <div class="jkt48-input-group">
+                    <input autocomplete="off" class="jkt48-password-input" id="jkt48PasswordInput" type="password" placeholder="Masukkan password..." />
                 </div>
-                
-                <button type="submit" id="submitBtn" class="submit-btn">
-                    <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
-                    <span id="submitText">Masuk</span>
+                <button class="jkt48-submit-btn" id="jkt48SubmitBtn" type="submit">
+                    🔓 Masuk ke Live Stream
                 </button>
             </form>
         </div>
-    </div>
 
-     Main Content 
-    <div id="mainContent" class="main-content">
-        <div class="container">
-             Header 
-            <div class="main-header">
-                <h1 class="main-title">SHOW THEATER</h1>
-                <p class="main-subtitle">Pajama Drive - Sabtu, 2 Ags 2025</p>
-            </div>
-
-             Video Player 
-            <div class="video-container">
-                <div class="video-wrapper">
-                     Loading Overlay 
-                    <div class="loading-overlay" id="loadingOverlay">
-                        <div class="loading-content">
-                            <div class="loading-spinner-large"></div>
-                            <p>Loading Stream...</p>
-                        </div>
-                    </div>
-
-                     YouTube Player 
-                    <div id="youtube-player"></div>
+         Video Container 
+        <div class="jkt48-video-container" id="jkt48VideoContainer">
+            <button class="jkt48-logout-btn" onclick="jkt48Logout()">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+            
+            <div class="jkt48-video-wrapper">
+                <div class="jkt48-player" id="jkt48Player"></div>
+                
+                 Top Progress Bar 
+                <div class="jkt48-top-progress">
+                    <div class="jkt48-top-progress-fill" id="jkt48TopProgressFill"></div>
                 </div>
                 
-                 View Counter 
-                <div class="view-counter">
-                    <div class="view-badge">
-                        <i data-lucide="eye" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <span>Views: <span id="viewCount">--</span></span>
+                 Video Overlay 
+                <div class="jkt48-video-overlay" id="jkt48VideoOverlay"></div>
+                
+                 Controls Overlay 
+                <div class="jkt48-controls-overlay" id="jkt48ControlsOverlay">
+                     Center Play Button 
+                    <button class="jkt48-play-button" id="jkt48PlayButton">
+                        <i class="fas fa-play" id="jkt48PlayIcon"></i>
+                    </button>
+                    
+                     Bottom Controls 
+                    <div class="jkt48-bottom-controls">
+                        <div class="jkt48-controls-row">
+                            <div class="jkt48-controls-left">
+                                 Play/Pause 
+                                <button class="jkt48-control-btn" id="jkt48PlayPauseBtn" title="Play/Pause">
+                                    <i class="fas fa-play" id="jkt48PlayPauseIcon"></i>
+                                </button>
+                                
+                                 Skip Backward 
+                                <button class="jkt48-control-btn" id="jkt48SkipBackBtn" title="Mundur 10 detik">
+                                    <i class="fas fa-backward"></i>
+                                </button>
+                                
+                                 Skip Forward 
+                                <button class="jkt48-control-btn" id="jkt48SkipForwardBtn" title="Maju 10 detik">
+                                    <i class="fas fa-forward"></i>
+                                </button>
+                                
+                                 Volume Control 
+                                <div class="jkt48-volume-control">
+                                    <button class="jkt48-control-btn" id="jkt48VolumeBtn" title="Mute/Unmute">
+                                        <i class="fas fa-volume-up" id="jkt48VolumeIcon"></i>
+                                    </button>
+                                    <div class="jkt48-volume-slider" id="jkt48VolumeSlider">
+                                        <div class="jkt48-volume-fill" id="jkt48VolumeFill"></div>
+                                    </div>
+                                </div>
+                                
+                                 Time Display 
+                                <div class="jkt48-time-display" id="jkt48TimeDisplay">
+                                    00:00 / 00:00
+                                </div>
+                            </div>
+                            
+                            <div class="jkt48-controls-right">
+                                 Settings 
+                                <div class="jkt48-settings-control">
+                                    <button class="jkt48-settings-btn" id="jkt48SettingsBtn" title="Pengaturan">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <div class="jkt48-settings-menu" id="jkt48SettingsMenu">
+                                        <div class="jkt48-settings-option active" data-quality="720p">
+                                            <i class="fas fa-video"></i> 720P HD
+                                        </div>
+                                        <div class="jkt48-settings-option" data-quality="1080p">
+                                            <i class="fas fa-video"></i> 1080P HD
+                                        </div>
+                                        <div class="jkt48-settings-option" data-quality="480p">
+                                            <i class="fas fa-video"></i> 480P
+                                        </div>
+                                        <div class="jkt48-settings-option" data-quality="360p">
+                                            <i class="fas fa-video"></i> 360P
+                                        </div>
+                                        <div class="jkt48-settings-option" data-quality="240p">
+                                            <i class="fas fa-video"></i> 240P
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                 Fullscreen 
+                                <button class="jkt48-control-btn" id="jkt48FullscreenBtn" title="Layar Penuh">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                
+                 Live Badge 
+                <div class="jkt48-live-badge" id="jkt48LiveBadge">🔴 LIVE</div>
+                
+                 Quality Badge 
+                <div class="jkt48-quality-badge" id="jkt48QualityBadge">720P HD</div>
+                
+                 Loading Indicator 
+                <div class="jkt48-loading-indicator" id="jkt48LoadingIndicator">
+                    <div class="jkt48-spinner"></div>
+                    <div>Memuat player...</div>
                 </div>
             </div>
-
-             Info Cards 
-            <div class="info-grid">
-                 Important Notes 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="alert-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title">Penting</h3>
-                    </div>
-                    
-                    <div class="info-item">
-                        <i data-lucide="refresh-cw" class="text-blue" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
-                        <p class="info-text">Jika video tidak muncul, silakan refresh halaman</p>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div style="width: 1.25rem; height: 1.25rem; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 0.125rem; flex-shrink: 0;">
-                            <div style="width: 0.5rem; height: 0.5rem; background: #000; border-radius: 50%; animation: pulse 2s infinite;"></div>
-                        </div>
-                        <p class="info-text">Jika loading terlalu lama, pastikan koneksi internet stabil</p>
-                    </div>
-                    
-                    <div style="padding-top: 0.5rem;">
-                        <button onclick="refreshPage()" class="action-btn btn-yellow">
-                            <i data-lucide="refresh-cw" style="width: 1rem; height: 1rem;"></i>
-                            Refresh Halaman
-                        </button>
-                    </div>
+            
+             Stats Card 
+            <div class="jkt48-stats-card">
+                <div class="jkt48-stats-icon">
+                    <i class="fas fa-eye"></i>
                 </div>
-
-                 Member List 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="users" class="text-purple" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title" style="color: #8b5cf6;">Daftar Member</h3>
-                    </div>
-                    <div class="member-content">
-                        <p>Delynn, Erine, Lily, Trisha, Nachia, Oline, Kimmy, Auwia, Giaa, Ekin, Mikaela, Intan.</p>
-                    </div>
+                <div class="jkt48-stats-text" id="jkt48ViewCount">
+                    <span class="jkt48-loading"></span> Loading views...
                 </div>
-
-                 Contact Person 
-                <div class="info-card">
-                    <div class="card-header">
-                        <i data-lucide="message-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
-                        <h3 class="card-title">Contact Person</h3>
-                    </div>
-                    
-                    <div class="info-item">
-                        <i data-lucide="phone" class="text-green" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
-                        <div>
-                            <p class="info-text">Butuh bantuan atau ada pertanyaan?</p>
-                            <p class="info-text">Hubungi admin kami</p>
-                        </div>
-                    </div>
-                    
-                    <div style="padding-top: 0.5rem;">
-                        <a href="https://wa.me/628970400899?text=Halo,%20saya%20ingin%20bertanya%20tentang%20Show%20Theater"
-                           target="_blank"
-                           class="action-btn btn-green btn-full">
-                            <i data-lucide="message-circle" style="width: 1rem; height: 1rem;"></i>
-                            Chat WhatsApp Admin
-                        </a>
-                    </div>
-                    
-                    <div style="padding-top: 0.5rem; text-align: center;">
-                        <small style="color: #9ca3af; font-size: 0.75rem;">
-                            +62 897-0400-899
-                        </small>
-                    </div>
+            </div>
+            
+             Info Card 
+            <div class="jkt48-info-card">
+                <div class="jkt48-info-title">
+                    <i class="fas fa-info-circle"></i> Panduan Kontrol Video
+                </div>
+                <ul class="jkt48-info-list">
+                    <li>
+                        <span class="jkt48-info-bullet"><i class="fas fa-play"></i></span>
+                        Klik video atau tombol play untuk mengontrol pemutaran
+                    </li>
+                    <li>
+                        <span class="jkt48-info-bullet"><i class="fas fa-volume-up"></i></span>
+                        Gunakan slider volume atau klik ikon suara untuk mengatur audio
+                    </li>
+                    <li>
+                        <span class="jkt48-info-bullet"><i class="fas fa-cog"></i></span>
+                        Klik ikon pengaturan untuk mengubah kualitas video
+                    </li>
+                    <li>
+                        <span class="jkt48-info-bullet"><i class="fas fa-expand"></i></span>
+                        Klik ikon expand untuk mode layar penuh
+                    </li>
+                    <li>
+                        <span class="jkt48-info-bullet"><i class="fas fa-wifi"></i></span>
+                        Pastikan koneksi internet stabil untuk streaming optimal
+                    </li>
+                </ul>
+                <div class="jkt48-action-buttons">
+                    <a class="jkt48-btn jkt48-btn-primary" href="javascript:void(0)" onclick="jkt48RefreshPage()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </a>
+                    <a class="jkt48-btn jkt48-btn-secondary" href="https://ngidoljkt48.vercel.app/live/backup" target="_blank">
+                        <i class="fas fa-link"></i> Backup
+                    </a>
+                    <a class="jkt48-btn jkt48-btn-whatsapp" href="http://wa.me/628970400899" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
+     YouTube IFrame API 
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // Configuration
-        const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
-        const VIDEO_ID = 'EdrMAvSwahU';
-        
         // Global variables
-        let player;
-        let isAuthenticated = false;
+        var jkt48Player;
+        var jkt48PlayerReady = false;
+        var jkt48IsPlaying = false;
+        var jkt48IsLive = true;
+        var jkt48IsMuted = false;
+        var jkt48Volume = 80;
+        var jkt48Quality = '720p';
+        var jkt48CurrentTime = 0;
+        var jkt48Duration = 0;
+        var jkt48ShowControls = false;
+        var jkt48ControlsTimeout;
+        var jkt48ProgressInterval;
+        
+        const jkt48ApiKey = "AIzaSyAboyR9wg4IXgqiuf9c6ZvSIxRvG2Ck4fI";
+        const jkt48VideoId = "KxNP_Grtrj8";
 
-        // Initialize Lucide icons
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-        });
-
-        // YouTube API ready callback
-        function onYouTubeIframeAPIReady() {
-            console.log('YouTube API ready');
-        }
-
-        // Password form handler
-        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // Check if user is already logged in when page loads
+        window.addEventListener('load', function() {
+            const isButtonRefresh = localStorage.getItem('jkt48ButtonRefresh');
             
-            const passwordInput = document.getElementById('passwordInput');
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const errorAlert = document.getElementById('errorAlert');
+            if (isButtonRefresh === 'true') {
+                localStorage.removeItem('jkt48ButtonRefresh');
+                jkt48LoadVideo();
+                jkt48GetViewCount();
+                setInterval(jkt48GetViewCount, 10000);
+                return;
+            }
             
-            const password = passwordInput.value.trim();
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitText.textContent = 'Memverifikasi...';
-            submitBtn.innerHTML = `
-                <div class="loading-spinner"></div>
-                <span>Memverifikasi...</span>
-            `;
-            errorAlert.classList.add('hidden');
-            
-            // Simulate authentication delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            if (VALID_PASSWORDS.includes(password)) {
-                isAuthenticated = true;
-                showMainContent();
-                loadVideo();
-                fetchViewCount();
-            } else {
-                // Show error
-                errorAlert.classList.remove('hidden');
-                
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `
-                    <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
-                    <span>Masuk</span>
-                `;
-                lucide.createIcons();
-                
-                // Clear password
-                passwordInput.value = '';
-                passwordInput.focus();
+            const isLoggedIn = sessionStorage.getItem('jkt48LoggedIn');
+            if (isLoggedIn === 'true') {
+                jkt48LoadVideo();
+                jkt48GetViewCount();
+                setInterval(jkt48GetViewCount, 10000);
             }
         });
 
-        // Show main content
-        function showMainContent() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            document.getElementById('mainContent').classList.add('fade-in');
+        function jkt48CheckPassword(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('jkt48SubmitBtn');
+            const passwordInput = document.getElementById('jkt48PasswordInput');
+            const password = passwordInput.value;
+
+            submitBtn.innerHTML = '<span class="jkt48-loading"></span> Memverifikasi...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                if (password === 'fullhouse6712' || password === 'jkt48xkj889' || password === 'jkt48992pxy' || password === 'fpi') {
+                    sessionStorage.setItem('jkt48LoggedIn', 'true');
+                    jkt48LoadVideo();
+                    jkt48GetViewCount();
+                    setInterval(jkt48GetViewCount, 10000);
+                } else {
+                    submitBtn.innerHTML = '🔓 Masuk ke Live Stream';
+                    submitBtn.disabled = false;
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    jkt48ShowNotification('Password salah! Silakan coba lagi.', 'error');
+                }
+            }, 1000);
         }
 
-        // Load YouTube video
-        function loadVideo() {
+        function jkt48LoadVideo() {
+            document.getElementById('jkt48MainCard').style.display = 'none';
+            document.getElementById('jkt48VideoContainer').style.display = 'flex';
+            
+            // Initialize YouTube player
             if (window.YT && window.YT.Player) {
-                player = new YT.Player('youtube-player', {
-                    videoId: VIDEO_ID,
+                jkt48InitializePlayer();
+            } else {
+                window.onYouTubeIframeAPIReady = jkt48InitializePlayer;
+            }
+            
+            // Setup video controls
+            jkt48SetupVideoControls();
+        }
+
+        function jkt48InitializePlayer() {
+            try {
+                jkt48Player = new YT.Player('jkt48Player', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: jkt48VideoId,
                     playerVars: {
-                        'autoplay': 1,
-                        'controls': 1,
+                        'autoplay': 0,
+                        'controls': 0,
+                        'showinfo': 0,
+                        'rel': 0,
                         'modestbranding': 1,
-                        'rel': 0
+                        'disablekb': 1,
+                        'fs': 0,
+                        'iv_load_policy': 3,
+                        'cc_load_policy': 0,
+                        'playsinline': 1,
+                        'enablejsapi': 1,
+                        'origin': window.location.origin
                     },
                     events: {
-                        'onReady': function() {
-                            console.log('Player ready');
-                            document.getElementById('loadingOverlay').style.display = 'none';
-                        },
-                        'onError': function(error) {
-                            console.error('Player error:', error);
-                            document.getElementById('loadingOverlay').innerHTML = `
-                                <div class="loading-content">
-                                    <i data-lucide="alert-circle" style="width: 3rem; height: 3rem; color: #ef4444; margin: 0 auto 1rem;"></i>
-                                    <p>Error loading stream. Please refresh.</p>
-                                </div>
-                            `;
-                            lucide.createIcons();
-                        }
+                        'onReady': jkt48OnPlayerReady,
+                        'onStateChange': jkt48OnPlayerStateChange,
+                        'onError': jkt48OnPlayerError
                     }
                 });
-            } else {
-                setTimeout(loadVideo, 500);
-            }
-        }
-
-        // Fetch view count
-        async function fetchViewCount() {
-            try {
-                const mockViews = Math.floor(Math.random() * 10000) + 1000;
-                document.getElementById('viewCount').textContent = mockViews.toLocaleString();
             } catch (error) {
-                document.getElementById('viewCount').textContent = 'Error';
+                console.error('Error initializing player:', error);
+                document.getElementById('jkt48LoadingIndicator').innerHTML = '<div>Error loading player</div>';
             }
         }
 
-        // Refresh page
-        function refreshPage() {
+        function jkt48OnPlayerReady(event) {
+            console.log('Player ready');
+            jkt48PlayerReady = true;
+            jkt48Player = event.target;
+            
+            // Hide loading indicator
+            document.getElementById('jkt48LoadingIndicator').style.display = 'none';
+            
+            // Set initial volume
+            jkt48Player.setVolume(jkt48Volume);
+            
+            // Get video duration
+            const duration = jkt48Player.getDuration();
+            if (duration > 0) {
+                jkt48Duration = duration;
+                jkt48IsLive = false;
+                document.getElementById('jkt48LiveBadge').style.display = 'none';
+                jkt48UpdateTimeDisplay();
+            }
+            
+            // Show controls initially
+            jkt48ShowVideoControls();
+        }
+
+        function jkt48OnPlayerStateChange(event) {
+            console.log('State changed:', event.data);
+            
+            if (event.data === YT.PlayerState.PLAYING) {
+                jkt48IsPlaying = true;
+                jkt48UpdatePlayButton();
+                jkt48StartProgressTracking();
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                jkt48IsPlaying = false;
+                jkt48UpdatePlayButton();
+                jkt48StopProgressTracking();
+            } else if (event.data === YT.PlayerState.ENDED) {
+                jkt48IsPlaying = false;
+                jkt48UpdatePlayButton();
+                jkt48StopProgressTracking();
+            }
+        }
+
+        function jkt48OnPlayerError(event) {
+            console.error('Player error:', event.data);
+            document.getElementById('jkt48LoadingIndicator').innerHTML = '<div>Error: Unable to load video</div>';
+        }
+
+        function jkt48SetupVideoControls() {
+            const videoOverlay = document.getElementById('jkt48VideoOverlay');
+            const controlsOverlay = document.getElementById('jkt48ControlsOverlay');
+            const videoWrapper = document.querySelector('.jkt48-video-wrapper');
+            
+            // Video click handler
+            videoOverlay.addEventListener('click', jkt48TogglePlayPause);
+            
+            // Mouse events for showing/hiding controls
+            videoWrapper.addEventListener('mouseenter', jkt48ShowVideoControls);
+            videoWrapper.addEventListener('mousemove', jkt48ShowVideoControls);
+            videoWrapper.addEventListener('mouseleave', jkt48HideVideoControls);
+            
+            // Play/Pause buttons
+            document.getElementById('jkt48PlayButton').addEventListener('click', jkt48TogglePlayPause);
+            document.getElementById('jkt48PlayPauseBtn').addEventListener('click', jkt48TogglePlayPause);
+            
+            // Skip buttons
+            document.getElementById('jkt48SkipBackBtn').addEventListener('click', () => jkt48Skip(-10));
+            document.getElementById('jkt48SkipForwardBtn').addEventListener('click', () => jkt48Skip(10));
+            
+            // Volume controls
+            document.getElementById('jkt48VolumeBtn').addEventListener('click', jkt48ToggleMute);
+            document.getElementById('jkt48VolumeSlider').addEventListener('click', jkt48HandleVolumeClick);
+            
+            // Settings selector
+            document.getElementById('jkt48SettingsBtn').addEventListener('click', jkt48ToggleSettingsMenu);
+            document.querySelectorAll('.jkt48-settings-option').forEach(option => {
+                option.addEventListener('click', (e) => jkt48ChangeQuality(e.target.dataset.quality));
+            });
+            
+            // Fullscreen
+            document.getElementById('jkt48FullscreenBtn').addEventListener('click', jkt48ToggleFullscreen);
+            
+            // Prevent context menu
+            videoWrapper.addEventListener('contextmenu', (e) => e.preventDefault());
+        }
+
+        function jkt48ShowVideoControls() {
+            if (!jkt48ShowControls) {
+                jkt48ShowControls = true;
+                document.getElementById('jkt48ControlsOverlay').classList.add('show');
+                document.getElementById('jkt48VideoOverlay').style.pointerEvents = 'none';
+            }
+            
+            clearTimeout(jkt48ControlsTimeout);
+            jkt48ControlsTimeout = setTimeout(jkt48HideVideoControls, 3000);
+        }
+
+        function jkt48HideVideoControls() {
+            jkt48ShowControls = false;
+            document.getElementById('jkt48ControlsOverlay').classList.remove('show');
+            document.getElementById('jkt48VideoOverlay').style.pointerEvents = 'auto';
+            document.getElementById('jkt48SettingsMenu').classList.remove('show');
+        }
+
+        function jkt48TogglePlayPause() {
+            if (!jkt48PlayerReady) return;
+            
+            try {
+                if (jkt48IsPlaying) {
+                    jkt48Player.pauseVideo();
+                } else {
+                    jkt48Player.playVideo();
+                }
+            } catch (error) {
+                console.error('Error toggling play/pause:', error);
+            }
+        }
+
+        function jkt48UpdatePlayButton() {
+            const playIcon = document.getElementById('jkt48PlayIcon');
+            const playPauseIcon = document.getElementById('jkt48PlayPauseIcon');
+            
+            if (jkt48IsPlaying) {
+                playIcon.className = 'fas fa-pause';
+                playPauseIcon.className = 'fas fa-pause';
+            } else {
+                playIcon.className = 'fas fa-play';
+                playPauseIcon.className = 'fas fa-play';
+            }
+        }
+
+        function jkt48Skip(seconds) {
+            if (!jkt48PlayerReady || jkt48IsLive) return;
+            
+            try {
+                const newTime = Math.max(0, Math.min(jkt48Duration, jkt48CurrentTime + seconds));
+                jkt48Player.seekTo(newTime, true);
+            } catch (error) {
+                console.error('Error skipping:', error);
+            }
+        }
+
+        function jkt48ToggleMute() {
+            if (!jkt48PlayerReady) return;
+            
+            try {
+                if (jkt48IsMuted) {
+                    jkt48Player.unMute();
+                    jkt48Player.setVolume(jkt48Volume);
+                    jkt48IsMuted = false;
+                    document.getElementById('jkt48VolumeIcon').className = 'fas fa-volume-up';
+                } else {
+                    jkt48Player.mute();
+                    jkt48IsMuted = true;
+                    document.getElementById('jkt48VolumeIcon').className = 'fas fa-volume-mute';
+                }
+                jkt48UpdateVolumeDisplay();
+            } catch (error) {
+                console.error('Error toggling mute:', error);
+            }
+        }
+
+        function jkt48HandleVolumeClick(event) {
+            if (!jkt48PlayerReady) return;
+            
+            const slider = event.currentTarget;
+            const rect = slider.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            jkt48Volume = Math.max(0, Math.min(100, percent * 100));
+            
+            try {
+                jkt48Player.setVolume(jkt48Volume);
+                if (jkt48Volume > 0 && jkt48IsMuted) {
+                    jkt48Player.unMute();
+                    jkt48IsMuted = false;
+                    document.getElementById('jkt48VolumeIcon').className = 'fas fa-volume-up';
+                }
+                jkt48UpdateVolumeDisplay();
+            } catch (error) {
+                console.error('Error setting volume:', error);
+            }
+        }
+
+        function jkt48UpdateVolumeDisplay() {
+            const volumeFill = document.getElementById('jkt48VolumeFill');
+            volumeFill.style.width = jkt48IsMuted ? '0%' : jkt48Volume + '%';
+        }
+
+        function jkt48StartProgressTracking() {
+            jkt48StopProgressTracking();
+            jkt48ProgressInterval = setInterval(() => {
+                if (jkt48PlayerReady && jkt48Player) {
+                    try {
+                        jkt48CurrentTime = jkt48Player.getCurrentTime();
+                        jkt48UpdateProgressBar();
+                        jkt48UpdateTimeDisplay();
+                    } catch (error) {
+                        console.error('Error updating progress:', error);
+                    }
+                }
+            }, 1000);
+        }
+
+        function jkt48StopProgressTracking() {
+            if (jkt48ProgressInterval) {
+                clearInterval(jkt48ProgressInterval);
+            }
+        }
+
+        function jkt48UpdateProgressBar() {
+            if (jkt48IsLive || jkt48Duration === 0) return;
+            
+            const percent = (jkt48CurrentTime / jkt48Duration) * 100;
+            document.getElementById('jkt48TopProgressFill').style.width = percent + '%';
+        }
+
+        function jkt48UpdateTimeDisplay() {
+            const timeDisplay = document.getElementById('jkt48TimeDisplay');
+            if (jkt48IsLive) {
+                timeDisplay.textContent = 'LIVE';
+            } else {
+                const current = jkt48FormatTime(jkt48CurrentTime);
+                const total = jkt48FormatTime(jkt48Duration);
+                timeDisplay.textContent = `${current} / ${total}`;
+            }
+        }
+
+        function jkt48FormatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function jkt48ToggleSettingsMenu() {
+            const menu = document.getElementById('jkt48SettingsMenu');
+            menu.classList.toggle('show');
+        }
+
+        function jkt48ChangeQuality(quality) {
+            if (!jkt48PlayerReady) return;
+            
+            jkt48Quality = quality;
+            document.getElementById('jkt48QualityBadge').textContent = `${quality.toUpperCase()} HD`;
+            
+            // Update active quality option
+            document.querySelectorAll('.jkt48-settings-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.quality === quality) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // Set YouTube quality
+            try {
+                const qualityMap = {
+                    '1080p': 'hd1080',
+                    '720p': 'hd720',
+                    '480p': 'large',
+                    '360p': 'medium',
+                    '240p': 'small'
+                };
+                jkt48Player.setPlaybackQuality(qualityMap[quality]);
+            } catch (error) {
+                console.error('Error changing quality:', error);
+            }
+            
+            jkt48ToggleSettingsMenu();
+        }
+
+        function jkt48ToggleFullscreen() {
+            const videoWrapper = document.querySelector('.jkt48-video-wrapper');
+            
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                videoWrapper.requestFullscreen();
+            }
+        }
+
+        function jkt48GetViewCount() {
+            fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${jkt48VideoId}&key=${jkt48ApiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items && data.items[0]) {
+                        const views = parseInt(data.items[0].statistics.viewCount).toLocaleString('id-ID');
+                        document.getElementById("jkt48ViewCount").innerHTML = `${views} penonton`;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching view count:", error);
+                    document.getElementById("jkt48ViewCount").innerHTML = "Views tidak tersedia";
+                });
+        }
+
+        function jkt48RefreshPage() {
+            localStorage.setItem('jkt48ButtonRefresh', 'true');
             window.location.reload();
         }
 
+        function jkt48Logout() {
+            sessionStorage.removeItem('jkt48LoggedIn');
+            localStorage.removeItem('jkt48ButtonRefresh');
+            window.location.reload();
+        }
+
+        function jkt48ShowNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #22c55e, #16a34a)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                font-weight: 500;
+                max-width: 280px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                font-size: 14px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
         // Security measures
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function (event) {
+            if (event.key === "F12" || 
+                (event.ctrlKey && event.shiftKey && event.key === "I") ||
+                (event.ctrlKey && event.shiftKey && event.key === "C") ||
+                (event.ctrlKey && event.key === "u")) {
+                event.preventDefault();
+                jkt48ShowNotification('Akses developer tools dilarang!', 'error');
+            }
         });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-                alert('Akses dilarang!');
+        // Add enter key support for password input
+        document.getElementById('jkt48PasswordInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                jkt48CheckPassword(event);
+            }
+        });
+
+        // Close settings menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const settingsControl = document.querySelector('.jkt48-settings-control');
+            if (!settingsControl.contains(event.target)) {
+                document.getElementById('jkt48SettingsMenu').classList.remove('show');
             }
         });
     </script>
