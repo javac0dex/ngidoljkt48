@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Theater - NGIDOL JKT48</title>
+    <meta name="description" content="Pajama Drive - Professional streaming experience">
+    <meta name="keywords" content="show theater, streaming, entertainment">
+    
+     Google Fonts 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+     Lucide Icons 
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Login Screen Styles */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-card {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .login-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fca5a5;
+        }
+
+        .loading-spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-subtitle {
+            color: #d1d5db;
+            font-size: 1.125rem;
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            background: #000000;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        /* Custom Video Player Styles */
+        .custom-video-player {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1f2937 0%, #000000 50%, #1f2937 100%);
+        }
+
+        .video-preview {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-preview-content {
+            text-align: center;
+        }
+
+        .play-button-large {
+            width: 6rem;
+            height: 6rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .play-button-large:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .video-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-subtitle {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #dc2626;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Controls Overlay */
+        .controls-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+
+        .custom-video-player:hover .controls-overlay,
+        .controls-visible .controls-overlay {
+            opacity: 1;
+        }
+
+        /* Live Indicator */
+        .live-indicator {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+
+        .live-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #dc2626;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .live-text {
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Bottom Controls */
+        .bottom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+        }
+
+        .progress-bar-bottom {
+            margin-bottom: 1rem;
+        }
+
+        .progress-track {
+            position: relative;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .progress-track:hover .progress-thumb {
+            opacity: 1;
+        }
+
+        .progress-thumb {
+            position: absolute;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background: #dc2626;
+            border-radius: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            left: 0%;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .control-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .control-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .control-btn:hover {
+            color: #dc2626;
+        }
+
+        .volume-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .volume-slider {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        .volume-group:hover .volume-slider {
+            width: 5rem;
+        }
+
+        .volume-input {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .volume-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc2626;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .volume-input::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc2626;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .time-display {
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .view-counter {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .view-badge {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .main-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-text {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .btn-yellow {
+            border-color: #eab308;
+            color: #facc15;
+        }
+
+        .btn-yellow:hover {
+            background: #eab308;
+            color: #000000;
+        }
+
+        .btn-blue {
+            border-color: #3b82f6;
+            color: #60a5fa;
+        }
+
+        .btn-blue:hover {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        .btn-green {
+            border-color: #25d366;
+            color: #ffffff;
+            background: #25d366;
+        }
+
+        .btn-green:hover {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .member-content {
+            text-align: center;
+            padding: 1rem 0;
+            color: #d1d5db;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .info-grid {
+                gap: 1rem;
+            }
+            
+            .info-card {
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Icon colors */
+        .text-green { color: #10b981; }
+        .text-blue { color: #3b82f6; }
+        .text-yellow { color: #f59e0b; }
+        .text-purple { color: #8b5cf6; }
+        .text-red { color: #ef4444; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body>
+     Login Screen 
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card fade-in">
+            <div class="login-header">
+                <div class="logo-icon">
+                    <i data-lucide="lock" style="color: white; width: 2rem; height: 2rem;"></i>
+                </div>
+                <h1 class="login-title">SHOW THEATER</h1>
+                <p class="login-subtitle">Pajama Drive - Sabtu, 2 Ags 2025</p>
+            </div>
+            
+            <form id="passwordForm">
+                <div class="form-group">
+                    <input 
+                        type="password"
+                        id="passwordInput"
+                        class="form-input"
+                        placeholder="Masukkan password"
+                        required
+                    >
+                </div>
+                
+                <div id="errorAlert" class="error-alert hidden">
+                    <i data-lucide="alert-circle" style="width: 1rem; height: 1rem;"></i>
+                    <span id="errorMessage">Password salah. Silakan coba lagi.</span>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="submit-btn">
+                    <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
+                    <span id="submitText">Masuk</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+     Main Content 
+    <div id="mainContent" class="main-content">
+        <div class="container">
+             Header 
+            <div class="main-header">
+                <h1 class="main-title">SHOW THEATER</h1>
+                <p class="main-subtitle">Pajama Drive - Sabtu, 2 Ags 2025</p>
+            </div>
+
+             Custom Video Player 
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <div class="custom-video-player" id="customVideoPlayer">
+                         Progress Bar at Top 
+                        <div class="progress-bar-top">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+
+                         Video Preview/Thumbnail 
+                        <div class="video-preview">
+                            <div class="video-preview-content">
+                                <div class="play-button-large" id="playButtonLarge">
+                                    <i data-lucide="play" style="color: white; width: 3rem; height: 3rem; margin-left: 0.25rem;"></i>
+                                </div>
+                                <h3 class="video-title">NGIDOL JKT48</h3>
+                                <p class="video-subtitle">Pajama Drive - Live Stream</p>
+                            </div>
+                        </div>
+
+                         Live Indicator 
+                        <div class="live-indicator" id="liveIndicator" style="display: none;">
+                            <div class="live-dot"></div>
+                            <span class="live-text">LIVE</span>
+                        </div>
+
+                         Controls Overlay 
+                        <div class="controls-overlay" id="controlsOverlay">
+                            <div class="bottom-controls">
+                                 Progress Bar 
+                                <div class="progress-bar-bottom">
+                                    <div class="progress-track" id="progressTrack">
+                                        <div class="progress-fill" id="progressFillBottom"></div>
+                                        <div class="progress-thumb" id="progressThumb"></div>
+                                    </div>
+                                </div>
+
+                                 Control Buttons 
+                                <div class="control-buttons">
+                                    <div class="control-left">
+                                         Play/Pause 
+                                        <button class="control-btn" id="playPauseBtn">
+                                            <i data-lucide="play" style="width: 1.5rem; height: 1.5rem;"></i>
+                                        </button>
+
+                                         Volume 
+                                        <div class="volume-group">
+                                            <button class="control-btn" id="volumeBtn">
+                                                <i data-lucide="volume-2" style="width: 1.25rem; height: 1.25rem;"></i>
+                                            </button>
+                                            <div class="volume-slider">
+                                                <input type="range" class="volume-input" id="volumeSlider" min="0" max="100" value="75">
+                                            </div>
+                                        </div>
+
+                                         Time Display 
+                                        <div class="time-display" id="timeDisplay">
+                                            0:00 / 1:00:00
+                                        </div>
+                                    </div>
+
+                                    <div class="control-right">
+                                         Settings 
+                                        <button class="control-btn" id="settingsBtn">
+                                            <i data-lucide="settings" style="width: 1.25rem; height: 1.25rem;"></i>
+                                        </button>
+
+                                         Fullscreen 
+                                        <button class="control-btn" id="fullscreenBtn">
+                                            <i data-lucide="maximize" style="width: 1.25rem; height: 1.25rem;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                 View Counter 
+                <div class="view-counter">
+                    <div class="view-badge">
+                        <i data-lucide="eye" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
+                        <span>Views: <span id="viewCount">--</span></span>
+                    </div>
+                </div>
+            </div>
+
+             Info Cards 
+            <div class="info-grid">
+                 Important Notes 
+                <div class="info-card">
+                    <div class="card-header">
+                        <i data-lucide="alert-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
+                        <h3 class="card-title">Penting</h3>
+                    </div>
+                    
+                    <div class="info-item">
+                        <i data-lucide="refresh-cw" class="text-blue" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
+                        <p class="info-text">Jika video tidak muncul, silakan refresh halaman</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div style="width: 1.25rem; height: 1.25rem; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 0.125rem; flex-shrink: 0;">
+                            <div style="width: 0.5rem; height: 0.5rem; background: #000; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                        </div>
+                        <p class="info-text">Jika loading terlalu lama, pastikan koneksi internet stabil</p>
+                    </div>
+                    
+                    <div style="padding-top: 0.5rem;">
+                        <button onclick="refreshPage()" class="action-btn btn-yellow">
+                            <i data-lucide="refresh-cw" style="width: 1rem; height: 1rem;"></i>
+                            Refresh Halaman
+                        </button>
+                    </div>
+                    
+                    <div style="padding-top: 0.5rem;">
+                        <a href="https://showtheater.my.id/live/june/pee/52012-22juni/backup"
+                           target="_blank"
+                           class="action-btn btn-blue btn-full">
+                            Backup Live Streaming
+                        </a>
+                    </div>
+                </div>
+
+                 Member List 
+                <div class="info-card">
+                    <div class="card-header">
+                        <i data-lucide="users" class="text-purple" style="width: 1.25rem; height: 1.25rem;"></i>
+                        <h3 class="card-title" style="color: #8b5cf6;">Daftar Member</h3>
+                    </div>
+                    <div class="member-content">
+                        <p>Delynn, Erine, Lily, Trisha, Nachia, Oline, Kimmy, Auwia, Giaa, Ekin, Mikaela, Intan.</p>
+                    </div>
+                </div>
+
+                 Contact Person 
+                <div class="info-card">
+                    <div class="card-header">
+                        <i data-lucide="message-circle" class="text-green" style="width: 1.25rem; height: 1.25rem;"></i>
+                        <h3 class="card-title">Contact Person</h3>
+                    </div>
+                    
+                    <div class="info-item">
+                        <i data-lucide="phone" class="text-green" style="width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; flex-shrink: 0;"></i>
+                        <div>
+                            <p class="info-text">Butuh bantuan atau ada pertanyaan?</p>
+                            <p class="info-text">Hubungi admin kami</p>
+                        </div>
+                    </div>
+                    
+                    <div style="padding-top: 0.5rem;">
+                        <a href="https://wa.me/628970400899?text=Halo,%20saya%20ingin%20bertanya%20tentang%20Show%20Theater"
+                           target="_blank"
+                           class="action-btn btn-green btn-full">
+                            <i data-lucide="message-circle" style="width: 1rem; height: 1rem;"></i>
+                            Chat WhatsApp Admin
+                        </a>
+                    </div>
+                    
+                    <div style="padding-top: 0.5rem; text-align: center;">
+                        <small style="color: #9ca3af; font-size: 0.75rem;">
+                            +62 897-0400-899
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
+        
+        // Global variables
+        let isAuthenticated = false;
+        let isPlaying = false;
+        let isMuted = false;
+        let volume = 75;
+        let currentTime = 0;
+        let duration = 3600; // 1 hour in seconds
+        let showControls = true;
+        let controlsTimeout;
+        let playInterval;
+
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            initializeVideoPlayer();
+        });
+
+        // Password form handler
+        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const passwordInput = document.getElementById('passwordInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            const password = passwordInput.value.trim();
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.textContent = 'Memverifikasi...';
+            submitBtn.innerHTML = `
+                <div class="loading-spinner"></div>
+                <span>Memverifikasi...</span>
+            `;
+            errorAlert.classList.add('hidden');
+            
+            // Simulate authentication delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            if (VALID_PASSWORDS.includes(password)) {
+                isAuthenticated = true;
+                showMainContent();
+                fetchViewCount();
+            } else {
+                // Show error
+                errorAlert.classList.remove('hidden');
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <i data-lucide="play" style="width: 1rem; height: 1rem;"></i>
+                    <span>Masuk</span>
+                `;
+                lucide.createIcons();
+                
+                // Clear password
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Show main content
+        function showMainContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('mainContent').classList.add('fade-in');
+        }
+
+        // Initialize video player
+        function initializeVideoPlayer() {
+            const videoPlayer = document.getElementById('customVideoPlayer');
+            const playButtonLarge = document.getElementById('playButtonLarge');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const volumeBtn = document.getElementById('volumeBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const liveIndicator = document.getElementById('liveIndicator');
+            const controlsOverlay = document.getElementById('controlsOverlay');
+
+            // Play button click handlers
+            playButtonLarge.addEventListener('click', togglePlay);
+            playPauseBtn.addEventListener('click', togglePlay);
+
+            // Volume controls
+            volumeBtn.addEventListener('click', toggleMute);
+            volumeSlider.addEventListener('input', function(e) {
+                volume = parseInt(e.target.value);
+                isMuted = volume === 0;
+                updateVolumeIcon();
+            });
+
+            // Mouse events for controls
+            videoPlayer.addEventListener('mouseenter', showControlsHandler);
+            videoPlayer.addEventListener('mousemove', showControlsHandler);
+            videoPlayer.addEventListener('mouseleave', hideControlsHandler);
+
+            // Progress bar click simulation
+            document.getElementById('progressTrack').addEventListener('click', function(e) {
+                const rect = e.target.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percentage = clickX / rect.width;
+                currentTime = Math.floor(duration * percentage);
+                updateProgress();
+            });
+        }
+
+        // Toggle play/pause
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            updatePlayButton();
+            
+            if (isPlaying) {
+                document.getElementById('liveIndicator').style.display = 'flex';
+                startPlayback();
+            } else {
+                document.getElementById('liveIndicator').style.display = 'none';
+                stopPlayback();
+            }
+        }
+
+        // Start playback simulation
+        function startPlayback() {
+            playInterval = setInterval(() => {
+                if (currentTime < duration) {
+                    currentTime++;
+                    updateProgress();
+                    updateTimeDisplay();
+                }
+            }, 1000);
+        }
+
+        // Stop playback
+        function stopPlayback() {
+            if (playInterval) {
+                clearInterval(playInterval);
+            }
+        }
+
+        // Update play button icon
+        function updatePlayButton() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playButtonLarge = document.getElementById('playButtonLarge');
+            
+            if (isPlaying) {
+                playPauseBtn.innerHTML = '<i data-lucide="pause" style="width: 1.5rem; height: 1.5rem;"></i>';
+                playButtonLarge.innerHTML = '<i data-lucide="pause" style="color: white; width: 3rem; height: 3rem;"></i>';
+            } else {
+                playPauseBtn.innerHTML = '<i data-lucide="play" style="width: 1.5rem; height: 1.5rem;"></i>';
+                playButtonLarge.innerHTML = '<i data-lucide="play" style="color: white; width: 3rem; height: 3rem; margin-left: 0.25rem;"></i>';
+            }
+            lucide.createIcons();
+        }
+
+        // Toggle mute
+        function toggleMute() {
+            isMuted = !isMuted;
+            updateVolumeIcon();
+        }
+
+        // Update volume icon
+        function updateVolumeIcon() {
+            const volumeBtn = document.getElementById('volumeBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            
+            if (isMuted || volume === 0) {
+                volumeBtn.innerHTML = '<i data-lucide="volume-x" style="width: 1.25rem; height: 1.25rem;"></i>';
+            } else {
+                volumeBtn.innerHTML = '<i data-lucide="volume-2" style="width: 1.25rem; height: 1.25rem;"></i>';
+            }
+            
+            volumeSlider.value = isMuted ? 0 : volume;
+            lucide.createIcons();
+        }
+
+        // Update progress bars
+        function updateProgress() {
+            const percentage = (currentTime / duration) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFillBottom').style.width = percentage + '%';
+            document.getElementById('progressThumb').style.left = percentage + '%';
+        }
+
+        // Update time display
+        function updateTimeDisplay() {
+            const timeDisplay = document.getElementById('timeDisplay');
+            timeDisplay.textContent = formatTime(currentTime) + ' / ' + formatTime(duration);
+        }
+
+        // Format time helper
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+
+            if (hours > 0) {
+                return hours + ':' + minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+            }
+            return minutes + ':' + secs.toString().padStart(2, '0');
+        }
+
+        // Controls visibility handlers
+        function showControlsHandler() {
+            showControls = true;
+            document.getElementById('controlsOverlay').style.opacity = '1';
+            
+            if (controlsTimeout) {
+                clearTimeout(controlsTimeout);
+            }
+            
+            if (isPlaying) {
+                controlsTimeout = setTimeout(() => {
+                    showControls = false;
+                    document.getElementById('controlsOverlay').style.opacity = '0';
+                }, 3000);
+            }
+        }
+
+        function hideControlsHandler() {
+            if (isPlaying) {
+                controlsTimeout = setTimeout(() => {
+                    showControls = false;
+                    document.getElementById('controlsOverlay').style.opacity = '0';
+                }, 1000);
+            }
+        }
+
+        // Fetch view count simulation
+        async function fetchViewCount() {
+            try {
+                // Simulate fetching view count
+                const mockViews = Math.floor(Math.random() * 10000) + 1000;
+                document.getElementById('viewCount').textContent = mockViews.toLocaleString();
+            } catch (error) {
+                document.getElementById('viewCount').textContent = 'Error';
+            }
+        }
+
+        // Refresh page function
+        function refreshPage() {
+            window.location.reload();
+        }
+
+        // Security measures
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+                alert('Akses dilarang!');
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (playInterval) {
+                clearInterval(playInterval);
+            }
+            if (controlsTimeout) {
+                clearTimeout(controlsTimeout);
+            }
+        });
+    </script>
+</body>
+</html>
