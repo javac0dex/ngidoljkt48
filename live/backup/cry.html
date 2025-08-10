@@ -13,6 +13,9 @@
      Lucide Icons 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
+     YouTube IFrame API 
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
     <style>
         * {
             margin: 0;
@@ -208,26 +211,32 @@
             height: 100%;
         }
 
-        .jkt48-player {
+        /* YouTube iframe will be injected here */
+        #jkt48Player {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            position: absolute; /* Ensure it fills the wrapper */
+            top: 0;
+            left: 0;
         }
 
         .jkt48-video-overlay {
             position: absolute;
             inset: 0;
             background: rgba(0, 0, 0, 0.2);
+            z-index: 1; /* Above player, below controls */
         }
 
         .jkt48-controls-overlay {
             position: absolute;
             inset: 0;
             transition: opacity 0.3s ease;
+            z-index: 2; /* Above overlay */
         }
 
         .jkt48-controls-overlay.hidden {
             opacity: 0;
+            pointer-events: none; /* Disable interaction when hidden */
         }
 
         .jkt48-play-button {
@@ -239,6 +248,7 @@
             background: none;
             border: none;
             cursor: pointer;
+            z-index: 3; /* Above controls overlay */
         }
 
         .jkt48-play-button-content {
@@ -405,6 +415,7 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
+            z-index: 3;
         }
 
         .jkt48-live-dot {
@@ -425,6 +436,7 @@
             border-radius: 9999px;
             font-size: 0.875rem;
             font-weight: 500;
+            z-index: 3;
         }
 
         .jkt48-loading-indicator {
@@ -435,6 +447,7 @@
             align-items: center;
             justify-content: center;
             background: rgba(0, 0, 0, 0.5);
+            z-index: 4; /* Highest z-index for loading */
         }
 
         .jkt48-spinner {
@@ -694,10 +707,8 @@
              JKT48 Video Player 
             <div class="jkt48-video-container" id="jkt48VideoContainer">
                 <div class="jkt48-video-wrapper">
-                    <video class="jkt48-player" id="jkt48Player" poster="/placeholder.svg?height=720&width=1280">
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                     YouTube Player will be injected here 
+                    <div class="jkt48-player" id="jkt48Player"></div>
                     
                      Overlay untuk mencegah klik langsung 
                     <div class="jkt48-video-overlay" id="jkt48VideoOverlay"></div>
@@ -748,11 +759,7 @@
                                     <div class="jkt48-quality-selector">
                                         <button class="jkt48-control-btn" id="jkt48QualityBtn">KUALITAS 720P</button>
                                         <div class="jkt48-quality-menu" id="jkt48QualityMenu">
-                                            <div class="jkt48-quality-option" data-quality="1080p">1080P HD</div>
-                                            <div class="jkt48-quality-option active" data-quality="720p">720P HD</div>
-                                            <div class="jkt48-quality-option" data-quality="480p">480P</div>
-                                            <div class="jkt48-quality-option" data-quality="360p">360P</div>
-                                            <div class="jkt48-quality-option" data-quality="240p">240P</div>
+                                             Quality options will be dynamically populated by JS 
                                         </div>
                                     </div>
                                     <button class="jkt48-control-btn" id="jkt48FullscreenBtn">
@@ -867,101 +874,141 @@
     <script>
         // Configuration
         const VALID_PASSWORDS = ['vava-227', 'vava-620', 'vava-333', 'fpi'];
-        
+        const VIDEO_ID = 'dQw4w9WgXcQ'; // Ganti dengan ID video YouTube Anda
+        const API_KEY = 'YOUR_YOUTUBE_DATA_API_KEY'; // Ganti dengan kunci API YouTube Data Anda
+
         // Global variables
+        let player;
         let isAuthenticated = false;
         let viewCountInterval;
-        
-        // Video player state
-        let isPlaying = false;
-        let currentTime = 0;
-        let duration = 0;
-        let volume = 1;
-        let quality = '720p';
-        let showControls = true;
         let controlsTimeout;
-        
+        let currentQuality = 'auto'; // Default quality
+
         // DOM elements
-        const video = document.getElementById('jkt48Player');
-        const container = document.getElementById('jkt48VideoContainer');
+        const loginScreen = document.getElementById('loginScreen');
+        const mainContent = document.getElementById('mainContent');
+        const passwordInput = document.getElementById('passwordInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorAlert = document.getElementById('errorAlert');
+        const viewCountSpan = document.getElementById('viewCount');
+
+        const jkt48PlayerDiv = document.getElementById('jkt48Player');
+        const jkt48VideoContainer = document.getElementById('jkt48VideoContainer');
         const controlsOverlay = document.getElementById('jkt48ControlsOverlay');
         const playButton = document.getElementById('jkt48PlayButton');
         const playPauseBtn = document.getElementById('jkt48PlayPauseBtn');
+        const playPauseText = document.getElementById('jkt48PlayPauseText');
         const progressBar = document.getElementById('jkt48ProgressBar');
         const progressFill = document.getElementById('jkt48ProgressFill');
         const progressHandle = document.getElementById('jkt48ProgressHandle');
         const timeDisplay = document.getElementById('jkt48TimeDisplay');
         const volumeSlider = document.getElementById('jkt48VolumeSlider');
         const volumeFill = document.getElementById('jkt48VolumeFill');
+        const volumeBtn = document.getElementById('jkt48VolumeBtn');
         const qualityBtn = document.getElementById('jkt48QualityBtn');
         const qualityMenu = document.getElementById('jkt48QualityMenu');
+        const qualityBadge = document.getElementById('jkt48QualityBadge');
         const fullscreenBtn = document.getElementById('jkt48FullscreenBtn');
         const loadingIndicator = document.getElementById('jkt48LoadingIndicator');
-        
+
         // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
-            initializeVideoPlayer();
         });
-        
-        // Initialize video player
-        function initializeVideoPlayer() {
-            // Video event listeners
-            video.addEventListener('loadedmetadata', function() {
-                duration = video.duration;
-                updateTimeDisplay();
-                loadingIndicator.style.display = 'none';
+
+        // YouTube API ready callback
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube API ready');
+            player = new YT.Player('jkt48Player', {
+                videoId: VIDEO_ID,
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0, // We use custom controls
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'enablejsapi': 1,
+                    'iv_load_policy': 3 // Disable annotations
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onPlaybackQualityChange': onPlaybackQualityChange,
+                    'onError': onPlayerError
+                }
             });
-            
-            video.addEventListener('timeupdate', function() {
-                currentTime = video.currentTime;
-                updateProgress();
-                updateTimeDisplay();
-            });
-            
-            video.addEventListener('ended', function() {
-                isPlaying = false;
-                updatePlayButton();
-                showMainPlayButton();
-            });
-            
-            // Control event listeners
-            playButton.addEventListener('click', togglePlay);
-            playPauseBtn.addEventListener('click', togglePlay);
-            
-            document.getElementById('jkt48SkipBackBtn').addEventListener('click', () => skipTime(-10));
-            document.getElementById('jkt48SkipForwardBtn').addEventListener('click', () => skipTime(10));
-            
-            progressBar.addEventListener('click', handleProgressClick);
-            volumeSlider.addEventListener('click', handleVolumeClick);
-            
-            qualityBtn.addEventListener('click', toggleQualityMenu);
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-            
-            // Quality menu options
-            document.querySelectorAll('.jkt48-quality-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const newQuality = this.dataset.quality;
-                    setQuality(newQuality);
-                });
-            });
-            
-            // Mouse move for auto-hide controls
-            container.addEventListener('mousemove', showControlsTemporarily);
-            container.addEventListener('mouseleave', hideControlsIfPlaying);
-            
-            // Initialize volume
-            volumeFill.style.width = '100%';
         }
-        
+
+        function onPlayerReady(event) {
+            console.log('Player ready');
+            // Set initial volume
+            player.setVolume(100); // Max volume
+            volumeFill.style.width = '100%';
+
+            // Hide main play button if autoplay works
+            if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                hideMainPlayButton();
+            } else {
+                showMainPlayButton();
+            }
+            
+            // Populate quality options
+            populateQualityOptions();
+
+            // Start updating progress and time
+            setInterval(updateProgressAndTime, 100);
+
+            // Initial hide controls
+            showControlsTemporarily();
+
+            // Hide loading indicator
+            loadingIndicator.style.display = 'none';
+        }
+
+        function onPlayerStateChange(event) {
+            switch (event.data) {
+                case YT.PlayerState.PLAYING:
+                    isPlaying = true;
+                    hideMainPlayButton();
+                    loadingIndicator.style.display = 'none';
+                    showControlsTemporarily(); // Reset auto-hide timer
+                    break;
+                case YT.PlayerState.PAUSED:
+                    isPlaying = false;
+                    showMainPlayButton();
+                    break;
+                case YT.PlayerState.BUFFERING:
+                    loadingIndicator.style.display = 'flex';
+                    break;
+                case YT.PlayerState.ENDED:
+                    isPlaying = false;
+                    showMainPlayButton();
+                    loadingIndicator.style.display = 'none';
+                    break;
+                case YT.PlayerState.CUED:
+                case YT.PlayerState.UNSTARTED:
+                    isPlaying = false;
+                    showMainPlayButton();
+                    loadingIndicator.style.display = 'flex';
+                    break;
+            }
+            updatePlayButton();
+        }
+
+        function onPlaybackQualityChange(event) {
+            currentQuality = event.data;
+            updateQualityDisplay(currentQuality);
+        }
+
+        function onPlayerError(event) {
+            console.error('YouTube Player Error:', event.data);
+            // You might want to display an error message to the user
+            loadingIndicator.style.display = 'none';
+            alert('Terjadi kesalahan pada pemutar video. Silakan coba refresh halaman.');
+        }
+
         // Password form handler
         document.getElementById('passwordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const passwordInput = document.getElementById('passwordInput');
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const errorAlert = document.getElementById('errorAlert');
             
             const password = passwordInput.value.trim();
             
@@ -980,6 +1027,7 @@
                 isAuthenticated = true;
                 showMainContent();
                 startViewCounter();
+                // Player will be initialized by onYouTubeIframeAPIReady
             } else {
                 // Show error
                 errorAlert.classList.remove('hidden');
@@ -1000,44 +1048,37 @@
         
         // Show main content
         function showMainContent() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            document.getElementById('mainContent').classList.add('fade-in');
+            loginScreen.style.display = 'none';
+            mainContent.style.display = 'block';
+            mainContent.classList.add('fade-in');
         }
         
         // Start view counter
         function startViewCounter() {
-            document.getElementById('viewCount').textContent = '1,247';
+            viewCountSpan.textContent = '1,247';
             
             viewCountInterval = setInterval(() => {
-                const current = parseInt(document.getElementById('viewCount').textContent.replace(/,/g, ''));
+                const current = parseInt(viewCountSpan.textContent.replace(/,/g, ''));
                 const newCount = current + Math.floor(Math.random() * 5);
-                document.getElementById('viewCount').textContent = newCount.toLocaleString();
+                viewCountSpan.textContent = newCount.toLocaleString();
             }, 30000);
         }
         
         // Video player functions
         function togglePlay() {
+            if (!player) return;
+
             if (isPlaying) {
-                video.pause();
-                isPlaying = false;
+                player.pauseVideo();
             } else {
-                video.play();
-                isPlaying = true;
-                hideMainPlayButton();
+                player.playVideo();
             }
-            updatePlayButton();
         }
         
         function updatePlayButton() {
-            const playText = document.getElementById('jkt48PlayText');
-            const playPauseText = document.getElementById('jkt48PlayPauseText');
-            
             if (isPlaying) {
-                playText.textContent = 'JEDA';
                 playPauseText.textContent = 'JEDA';
             } else {
-                playText.textContent = 'PUTAR';
                 playPauseText.textContent = 'PUTAR';
             }
         }
@@ -1051,38 +1092,52 @@
         }
         
         function skipTime(seconds) {
-            const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
-            video.currentTime = newTime;
+            if (!player) return;
+            const newTime = player.getCurrentTime() + seconds;
+            player.seekTo(newTime, true);
         }
         
         function handleProgressClick(e) {
+            if (!player) return;
             const rect = progressBar.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            const newTime = (clickX / rect.width) * duration;
-            video.currentTime = newTime;
+            const newTime = (clickX / rect.width) * player.getDuration();
+            player.seekTo(newTime, true);
         }
         
         function handleVolumeClick(e) {
+            if (!player) return;
             const rect = volumeSlider.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            const newVolume = clickX / rect.width;
-            video.volume = newVolume;
-            volume = newVolume;
-            volumeFill.style.width = (newVolume * 100) + '%';
+            let newVolume = (clickX / rect.width) * 100;
+            newVolume = Math.max(0, Math.min(100, newVolume)); // Clamp between 0 and 100
+            player.setVolume(newVolume);
+            volumeFill.style.width = newVolume + '%';
         }
+
+        volumeBtn.addEventListener('click', function() {
+            if (!player) return;
+            if (player.isMuted()) {
+                player.unMute();
+                volumeFill.style.width = player.getVolume() + '%';
+            } else {
+                player.mute();
+                volumeFill.style.width = '0%';
+            }
+        });
         
-        function updateProgress() {
-            if (duration > 0) {
-                const progress = (currentTime / duration) * 100;
+        function updateProgressAndTime() {
+            if (!player || !player.getDuration) return; // Ensure player is ready
+
+            const current = player.getCurrentTime();
+            const total = player.getDuration();
+
+            if (total > 0) {
+                const progress = (current / total) * 100;
                 progressFill.style.width = progress + '%';
                 progressHandle.style.left = progress + '%';
             }
-        }
-        
-        function updateTimeDisplay() {
-            const current = formatTime(currentTime);
-            const total = formatTime(duration);
-            timeDisplay.textContent = `${current} / ${total}`;
+            timeDisplay.textContent = `${formatTime(current)} / ${formatTime(total)}`;
         }
         
         function formatTime(time) {
@@ -1095,25 +1150,74 @@
             qualityMenu.classList.toggle('show');
         }
         
+        function populateQualityOptions() {
+            if (!player || !player.getAvailablePlaybackQualities) return;
+
+            const availableQualities = player.getAvailablePlaybackQualities();
+            qualityMenu.innerHTML = ''; // Clear existing options
+
+            const qualityMap = {
+                'highres': 'Highest',
+                'hd1080': '1080P HD',
+                'hd720': '720P HD',
+                'large': '480P',
+                'medium': '360P',
+                'small': '240P',
+                'tiny': '144P',
+                'auto': 'Auto' // YouTube's default auto quality
+            };
+
+            availableQualities.forEach(q => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('jkt48-quality-option');
+                if (q === currentQuality) {
+                    optionDiv.classList.add('active');
+                }
+                optionDiv.dataset.quality = q;
+                optionDiv.textContent = qualityMap[q] || q.toUpperCase();
+                optionDiv.addEventListener('click', () => setQuality(q));
+                qualityMenu.appendChild(optionDiv);
+            });
+
+            // Set initial display
+            updateQualityDisplay(player.getPlaybackQuality());
+        }
+
         function setQuality(newQuality) {
-            quality = newQuality;
-            qualityBtn.textContent = `KUALITAS ${newQuality.toUpperCase()}`;
-            document.getElementById('jkt48QualityBadge').textContent = `${newQuality.toUpperCase()} HD`;
+            if (!player) return;
+            player.setPlaybackQuality(newQuality);
+            currentQuality = newQuality; // Update state immediately for UI
+            updateQualityDisplay(newQuality);
+            qualityMenu.classList.remove('show');
             
-            // Update active quality option
+            // Update active class in menu
             document.querySelectorAll('.jkt48-quality-option').forEach(option => {
                 option.classList.remove('active');
                 if (option.dataset.quality === newQuality) {
                     option.classList.add('active');
                 }
             });
-            
-            qualityMenu.classList.remove('show');
+        }
+
+        function updateQualityDisplay(qualityCode) {
+            const qualityMapDisplay = {
+                'highres': 'Highest',
+                'hd1080': '1080P HD',
+                'hd720': '720P HD',
+                'large': '480P',
+                'medium': '360P',
+                'small': '240P',
+                'tiny': '144P',
+                'auto': 'Auto'
+            };
+            const displayQuality = qualityMapDisplay[qualityCode] || qualityCode.toUpperCase();
+            qualityBtn.textContent = `KUALITAS ${displayQuality}`;
+            qualityBadge.textContent = displayQuality;
         }
         
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                container.requestFullscreen().catch(err => {
+                jkt48VideoContainer.requestFullscreen().catch(err => {
                     console.log('Error attempting to enable fullscreen:', err);
                 });
             } else {
@@ -1122,27 +1226,28 @@
         }
         
         function showControlsTemporarily() {
-            showControls = true;
             controlsOverlay.classList.remove('hidden');
             
             clearTimeout(controlsTimeout);
             if (isPlaying) {
                 controlsTimeout = setTimeout(() => {
-                    showControls = false;
                     controlsOverlay.classList.add('hidden');
                 }, 3000);
             }
         }
         
-        function hideControlsIfPlaying() {
+        // Hide controls when mouse leaves container, if playing
+        jkt48VideoContainer.addEventListener('mouseleave', function() {
             if (isPlaying) {
                 clearTimeout(controlsTimeout);
                 controlsTimeout = setTimeout(() => {
-                    showControls = false;
                     controlsOverlay.classList.add('hidden');
-                }, 1000);
+                }, 1000); // Shorter delay for leaving
             }
-        }
+        });
+
+        // Show controls when mouse enters container
+        jkt48VideoContainer.addEventListener('mouseenter', showControlsTemporarily);
         
         // Refresh page function
         function refreshPage() {
@@ -1166,11 +1271,14 @@
             if (viewCountInterval) {
                 clearInterval(viewCountInterval);
             }
+            if (player && typeof player.destroy === 'function') {
+                player.destroy();
+            }
         });
         
         // Close quality menu when clicking outside
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.jkt48-quality-selector')) {
+            if (!e.target.closest('.jkt48-quality-selector') && qualityMenu.classList.contains('show')) {
                 qualityMenu.classList.remove('show');
             }
         });
