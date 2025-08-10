@@ -12,10 +12,10 @@
 
   <style>
       :root {
-          --primary: #d4af37;
+          --primary: #d4af37; /* Gold-like primary color */
           --primary-dark: #b8941f;
-          --secondary: #ff6b35;
-          --accent: #10b981;
+          --secondary: #ff6b35; /* Orange accent */
+          --accent: #10b981; /* Green accent */
           --whatsapp: #25d366;
           --background: #0a0a0a;
           --surface: #1a1a1a;
@@ -26,7 +26,7 @@
           --success: #22c55e;
           --warning: #f59e0b;
           --error: #ef4444;
-          --gold: #ffd700;
+          --gold: #ffd700; /* Brighter gold */
           --gold-dark: #ffb347;
       }
 
@@ -46,18 +46,15 @@
       }
 
       .jkt48-concert-container {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 70%, #000000 100%);
-          color: var(--text);
-          min-height: 100vh;
+          width: 100%;
+          height: 100vh;
           display: flex;
           justify-content: center;
           align-items: center;
           padding: 20px;
           position: relative;
           overflow: hidden;
-          width: 100%; /* Ensure it takes full width */
-          box-sizing: border-box; /* Include padding in width */
+          box-sizing: border-box;
       }
 
       .jkt48-concert-container::before {
@@ -99,6 +96,10 @@
           max-width: 450px;
           position: relative;
           z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
       }
 
       .jkt48-main-card::before {
@@ -118,7 +119,6 @@
       }
 
       .jkt48-logo-container {
-          text-align: center;
           margin-bottom: 25px;
       }
 
@@ -149,7 +149,6 @@
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          text-align: center;
           letter-spacing: -0.5px;
           line-height: 1.2;
       }
@@ -157,7 +156,6 @@
       .jkt48-subtitle {
           color: var(--text-muted);
           font-size: 16px;
-          text-align: center;
           margin-bottom: 30px;
           font-weight: 500;
           background: linear-gradient(135deg, #ffffff, #cccccc);
@@ -170,6 +168,7 @@
           display: flex;
           flex-direction: column;
           gap: 20px;
+          width: 100%;
       }
 
       .jkt48-input-group {
@@ -251,7 +250,8 @@
           gap: 25px;
           position: relative;
           z-index: 1;
-          max-width: 1200px;
+          max-width: 1200px; /* Max width for main content */
+          margin: 0 auto; /* Center the content */
       }
 
       .jkt48-video-wrapper {
@@ -552,6 +552,33 @@
           50% { opacity: 0.7; }
       }
 
+      .jkt48-content-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 25px;
+          width: 100%;
+          max-width: 1200px;
+          margin-top: 25px; /* Space below video */
+      }
+
+      @media (min-width: 768px) {
+          .jkt48-content-grid {
+              grid-template-columns: 2fr 1fr; /* Video on left, info on right */
+          }
+      }
+
+      @media (min-width: 1024px) {
+          .jkt48-content-grid {
+              grid-template-columns: 3fr 1fr; /* Wider video, info on right */
+          }
+      }
+
+      .jkt48-info-section {
+          display: flex;
+          flex-direction: column;
+          gap: 25px;
+      }
+
       .jkt48-stats-card {
           background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9));
           backdrop-filter: blur(25px);
@@ -563,7 +590,6 @@
           gap: 12px;
           box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
           width: 100%;
-          max-width: 500px; /* Adjusted for better layout */
       }
 
       .jkt48-stats-icon {
@@ -594,7 +620,6 @@
           padding: 25px;
           border-radius: 16px;
           width: 100%;
-          max-width: 500px;
           box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
       }
 
@@ -735,6 +760,12 @@
               font-size: 14px;
           }
 
+          .jkt48-content-grid {
+              grid-template-columns: 1fr; /* Stack columns on small screens */
+              margin-top: 20px;
+          }
+
+          .jkt48-stats-card,
           .jkt48-info-card {
               max-width: 100%;
           }
@@ -794,162 +825,171 @@
 </head>
 <body>
   <div class="jkt48-concert-container">
-       Login Screen / Main Card 
-      <div class="jkt48-main-card" id="jkt48MainCard">
-          <div class="jkt48-logo-container">
-              <img alt="JKT48 Full House Logo" class="jkt48-logo-image" src="/public/images/jkt48-logo.png" />
-          </div>
-          <h1 class="jkt48-title">JKT48 Special Concert<br />FULL HOUSE</h1>
-          <p class="jkt48-subtitle">26 Juli 2025</p>
-          <p class="jkt48-subtitle">Password sama</p>
+     Login Screen / Main Card 
+    <div class="jkt48-main-card" id="jkt48MainCard">
+        <div class="jkt48-logo-container">
+            <img alt="JKT48 Full House Logo" class="jkt48-logo-image" src="/public/images/jkt48-logo.png" />
+        </div>
+        <h1 class="jkt48-title">JKT48 Special Concert<br />FULL HOUSE</h1>
+        <p class="jkt48-subtitle">26 Juli 2025</p>
+        <p class="jkt48-subtitle">Password sama</p>
 
-          <form class="jkt48-form" onsubmit="jkt48CheckPassword(event)">
-              <div class="jkt48-input-group">
-                  <input autocomplete="off" class="jkt48-password-input" id="jkt48PasswordInput" type="password" placeholder="Masukkan password" required />
-              </div>
-              <button class="jkt48-submit-btn" id="jkt48SubmitBtn" type="submit">
-                  🔓 Masuk ke Live Stream
-              </button>
-          </form>
-      </div>
+        <form class="jkt48-form" onsubmit="jkt48CheckPassword(event)">
+            <div class="jkt48-input-group">
+                <input autocomplete="off" class="jkt48-password-input" id="jkt48PasswordInput" type="password" placeholder="Masukkan password" required />
+            </div>
+            <button class="jkt48-submit-btn" id="jkt48SubmitBtn" type="submit">
+                🔓 Masuk ke Live Stream
+            </button>
+        </form>
+    </div>
 
-       Video Content 
-      <div class="jkt48-video-container" id="jkt48VideoContainer">
-          <button class="jkt48-logout-btn" onclick="jkt48Logout()">
-              Keluar
-          </button>
+     Video Content 
+    <div class="jkt48-video-container" id="jkt48VideoContainer">
+        <button class="jkt48-logout-btn" onclick="jkt48Logout()">
+            Keluar
+        </button>
 
-          <div class="jkt48-video-wrapper">
-              <div class="jkt48-player" id="jkt48Player"></div>
+        <div class="jkt48-video-wrapper">
+            <div class="jkt48-player" id="jkt48Player"></div>
 
-              Video Overlay untuk mencegah akses langsung
-              <div class="jkt48-video-overlay" id="jkt48VideoOverlay"></div>
+             Video Overlay untuk mencegah akses langsung 
+            <div class="jkt48-video-overlay" id="jkt48VideoOverlay"></div>
 
-              Controls Overlay
-              <div class="jkt48-controls-overlay" id="jkt48ControlsOverlay">
-                  Play/Pause Button
-                  <button class="jkt48-play-button" id="jkt48PlayButton">
-                      <span id="jkt48PlayText">PUTAR</span>
-                  </button>
+             Controls Overlay 
+            <div class="jkt48-controls-overlay" id="jkt48ControlsOverlay">
+                 Play/Pause Button 
+                <button class="jkt48-play-button" id="jkt48PlayButton">
+                    <span id="jkt48PlayText">PUTAR</span>
+                </button>
 
-                  Bottom Controls
-                  <div class="jkt48-bottom-controls">
-                      Progress Bar
-                      <div class="jkt48-progress-bar" id="jkt48ProgressBar">
-                          <div class="jkt48-progress-fill" id="jkt48ProgressFill"></div>
-                          <div class="jkt48-progress-handle" id="jkt48ProgressHandle"></div>
-                      </div>
+                 Bottom Controls 
+                <div class="jkt48-bottom-controls">
+                     Progress Bar 
+                    <div class="jkt48-progress-bar" id="jkt48ProgressBar">
+                        <div class="jkt48-progress-fill" id="jkt48ProgressFill"></div>
+                        <div class="jkt48-progress-handle" id="jkt48ProgressHandle"></div>
+                    </div>
 
-                      Controls Row
-                      <div class="jkt48-controls-row">
-                          <div class="jkt48-controls-left">
-                              <button class="jkt48-control-btn" id="jkt48PlayPauseBtn">
-                                  <span id="jkt48PlayPauseText">PUTAR</span>
-                              </button>
-                              <button class="jkt48-control-btn" id="jkt48SkipBackBtn">
-                                  MUNDUR
-                              </button>
-                              <button class="jkt48-control-btn" id="jkt48SkipForwardBtn">
-                                  MAJU
-                              </button>
+                     Controls Row 
+                    <div class="jkt48-controls-row">
+                        <div class="jkt48-controls-left">
+                            <button class="jkt48-control-btn" id="jkt48PlayPauseBtn">
+                                <span id="jkt48PlayPauseText">PUTAR</span>
+                            </button>
+                            <button class="jkt48-control-btn" id="jkt48SkipBackBtn">
+                                MUNDUR
+                            </button>
+                            <button class="jkt48-control-btn" id="jkt48SkipForwardBtn">
+                                MAJU
+                            </button>
 
-                              <div class="jkt48-volume-control">
-                                  <button class="jkt48-control-btn" id="jkt48VolumeBtn">
-                                      <span id="jkt48VolumeText">SUARA</span>
-                                  </button>
-                                  <div class="jkt48-volume-slider" id="jkt48VolumeSlider">
-                                      <div class="jkt48-volume-fill" id="jkt48VolumeFill"></div>
-                                  </div>
-                              </div>
+                            <div class="jkt48-volume-control">
+                                <button class="jkt48-control-btn" id="jkt48VolumeBtn">
+                                    <span id="jkt48VolumeText">SUARA</span>
+                                </button>
+                                <div class="jkt48-volume-slider" id="jkt48VolumeSlider">
+                                    <div class="jkt48-volume-fill" id="jkt48VolumeFill"></div>
+                                </div>
+                            </div>
 
-                              <div class="jkt48-time-display" id="jkt48TimeDisplay">
-                                  00:00 / 00:00
-                              </div>
-                          </div>
+                            <div class="jkt48-time-display" id="jkt48TimeDisplay">
+                                00:00 / 00:00
+                            </div>
+                        </div>
 
-                          <div class="jkt48-controls-right">
-                              <div class="jkt48-quality-selector">
-                                  <button class="jkt48-quality-btn" id="jkt48QualityBtn">KUALITAS 720P</button>
-                                  <div class="jkt48-quality-menu" id="jkt48QualityMenu">
-                                      <div class="jkt48-quality-option" data-quality="1080p">1080P HD</div>
-                                      <div class="jkt48-quality-option active" data-quality="720p">720P HD</div>
-                                      <div class="jkt48-quality-option" data-quality="480p">480P</div>
-                                      <div class="jkt48-quality-option" data-quality="360p">360P</div>
-                                      <div class="jkt48-quality-option" data-quality="240p">240P</div>
-                                  </div>
-                              </div>
-                              <button class="jkt48-control-btn" id="jkt48FullscreenBtn">
-                                  LAYAR PENUH
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                        <div class="jkt48-controls-right">
+                            <div class="jkt48-quality-selector">
+                                <button class="jkt48-quality-btn" id="jkt48QualityBtn">KUALITAS 720P</button>
+                                <div class="jkt48-quality-menu" id="jkt48QualityMenu">
+                                    <div class="jkt48-quality-option" data-quality="1080p">1080P HD</div>
+                                    <div class="jkt48-quality-option active" data-quality="720p">720P HD</div>
+                                    <div class="jkt48-quality-option" data-quality="480p">480P</div>
+                                    <div class="jkt48-quality-option" data-quality="360p">360P</div>
+                                    <div class="jkt48-quality-option" data-quality="240p">240P</div>
+                                </div>
+                            </div>
+                            <button class="jkt48-control-btn" id="jkt48FullscreenBtn">
+                                LAYAR PENUH
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-              Live Badge
-              <div class="jkt48-live-badge" id="jkt48LiveBadge">🔴 LIVE</div>
+             Live Badge 
+            <div class="jkt48-live-badge" id="jkt48LiveBadge">🔴 LIVE</div>
 
-              Quality Badge
-              <div class="jkt48-quality-badge" id="jkt48QualityBadge">720P HD</div>
+             Quality Badge 
+            <div class="jkt48-quality-badge" id="jkt48QualityBadge">720P HD</div>
 
-              Loading Indicator
-              <div class="jkt48-loading-indicator" id="jkt48LoadingIndicator">
-                  <div class="jkt48-spinner"></div>
-                  <div>Memuat player...</div>
-              </div>
-          </div>
+             Loading Indicator 
+            <div class="jkt48-loading-indicator" id="jkt48LoadingIndicator">
+                <div class="jkt48-spinner"></div>
+                <div>Memuat player...</div>
+            </div>
+        </div>
 
-          <div class="jkt48-stats-card">
-              <div class="jkt48-stats-icon">
-                  VIEWS
-              </div>
-              <div class="jkt48-stats-text" id="jkt48ViewCount">
-                  <span class="jkt48-loading"></span> Loading views...
-              </div>
-          </div>
+         Content Grid for Stats and Info Cards 
+        <div class="jkt48-content-grid">
+             Main Video Area (already handled by jkt48-video-wrapper) 
+             This div is just a placeholder for the grid layout 
+            <div></div> 
 
-          <div class="jkt48-info-card">
-              <div class="jkt48-info-title">
-                  ℹ️ Panduan Kontrol Video
-              </div>
-              <ul class="jkt48-info-list">
-                  <li>
-                      <span class="jkt48-info-bullet">▶️</span>
-                      Klik video atau tombol PUTAR untuk mengontrol pemutaran
-                  </li>
-                  <li>
-                      <span class="jkt48-info-bullet">🔊</span>
-                      Gunakan slider volume atau klik SUARA untuk mengatur audio
-                  </li>
-                  <li>
-                      <span class="jkt48-info-bullet">⚙️</span>
-                      Klik KUALITAS untuk mengubah resolusi video
-                  </li>
-                  <li>
-                      <span class="jkt48-info-bullet">📺</span>
-                      Klik LAYAR PENUH untuk mode fullscreen
-                  </li>
-                  <li>
-                      <span class="jkt48-info-bullet">📶</span>
-                      Pastikan koneksi internet stabil
-                  </li>
-              </ul>
-              <div class="jkt48-action-buttons">
-                  <a class="jkt48-btn jkt48-btn-primary" href="javascript:void(0)" onclick="jkt48RefreshPage()">
-                      🔄 Refresh
-                  </a>
-                  <a class="jkt48-btn jkt48-btn-secondary" href="https://ngidoljkt48.vercel.app/live/backup" target="_blank">
-                      🔗 Backup
-                  </a>
-                  <a class="jkt48-btn jkt48-btn-whatsapp" href="http://wa.me/628970400899" target="_blank">
-                      💬 WhatsApp
-                  </a>
-              </div>
-          </div>
-      </div>
+            <div class="jkt48-info-section">
+                <div class="jkt48-stats-card">
+                    <div class="jkt48-stats-icon">
+                        VIEWS
+                    </div>
+                    <div class="jkt48-stats-text" id="jkt48ViewCount">
+                        <span class="jkt48-loading"></span> Loading views...
+                    </div>
+                </div>
+
+                <div class="jkt48-info-card">
+                    <div class="jkt48-info-title">
+                        ℹ️ Panduan Kontrol Video
+                    </div>
+                    <ul class="jkt48-info-list">
+                        <li>
+                            <span class="jkt48-info-bullet">▶️</span>
+                            Klik video atau tombol PUTAR untuk mengontrol pemutaran
+                        </li>
+                        <li>
+                            <span class="jkt48-info-bullet">🔊</span>
+                            Gunakan slider volume atau klik SUARA untuk mengatur audio
+                        </li>
+                        <li>
+                            <span class="jkt48-info-bullet">⚙️</span>
+                            Klik KUALITAS untuk mengubah resolusi video
+                        </li>
+                        <li>
+                            <span class="jkt48-info-bullet">📺</span>
+                            Klik LAYAR PENUH untuk mode fullscreen
+                        </li>
+                        <li>
+                            <span class="jkt48-info-bullet">📶</span>
+                            Pastikan koneksi internet stabil
+                        </li>
+                    </ul>
+                    <div class="jkt48-action-buttons">
+                        <a class="jkt48-btn jkt48-btn-primary" href="javascript:void(0)" onclick="jkt48RefreshPage()">
+                            🔄 Refresh
+                        </a>
+                        <a class="jkt48-btn jkt48-btn-secondary" href="https://ngidoljkt48.vercel.app/live/backup" target="_blank">
+                            🔗 Backup
+                        </a>
+                        <a class="jkt48-btn jkt48-btn-whatsapp" href="http://wa.me/628970400899" target="_blank">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 
-  YouTube IFrame API
+   YouTube IFrame API 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
       // Global variables
